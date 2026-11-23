@@ -1,4 +1,8 @@
 node_modules/
+.venv/
+.playwright-browsers/
+motion/**/build/
+motion/**/out/*.mp4
 dist/
 coverage/
 .DS_Store

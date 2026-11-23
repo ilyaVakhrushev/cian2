@@ -1,0 +1,8 @@
+@font-face{font-family:Manrope;src:url('./fonts/Manrope-Variable.ttf') format('truetype');font-weight:200 800;font-display:block}
+:root{
+  --font:Manrope,Arial,sans-serif;--w-regular:400;--w-medium:600;--w-bold:800;
+  --accent:#0054fd;--accent-ink:#fff;--ink:#171b20;--ink2:#697583;--ink3:#929aa6;
+  --line:#e2e7e4;--line2:#e1e5e9;--soft:#e8efff;--surface:#f7f8fa;--bg:#f7f8fa;
+  --dark:#10251d;--dim:16,37,29;--ring-stops:#a8caff,#b2efc0,#c0fd8d,#a8caff;
+  --r-app:34px;--sub-bg:rgba(16,37,29,.9);--cursor:#0054fd;
+}

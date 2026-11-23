@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Короткая заявка на ипотеку · Циан · 15 секунд</title>
+  <link rel="stylesheet" href="brand/brand.css">
+  <link rel="stylesheet" href="base.css">
+  <script src="plan.js"></script>
+  <script src="cues.js"></script>
+  <script src="tmap.js"></script>
+  <script src="engine.js"></script>
+  <style>
+    #frame{background:#f7f8fa}
+    #backdrop{position:absolute;left:960px;top:0;width:960px;height:1080px;background:radial-gradient(ellipse at 16% 91%,#b5fa91 0,transparent 58%),radial-gradient(ellipse at 96% 9%,#c7e8ff 0,transparent 62%),#e8f3e8}
+    #rail{position:absolute;left:104px;top:88px;display:flex;align-items:center;gap:25px;z-index:7}
+    #brandName{font:750 38px/1 -apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;letter-spacing:-2px;color:#0054fd}
+    #railLine{width:1px;height:25px;background:#d5dce3}
+    #railLabel{font-size:16px;color:#697583;font-weight:600}
+    #copy{position:absolute;left:104px;top:319px;width:800px;z-index:2}
+    #kicker{font-size:16px;letter-spacing:.07em;color:#667583;margin-bottom:29px}
+    #headline{font-size:91px;line-height:1.05;font-weight:800;letter-spacing:-5.4px;max-width:800px}
+    #headline span{display:block;color:#0054fd}
+    #description{max-width:660px;margin-top:34px;font-size:25px;line-height:1.48;color:#697583;letter-spacing:-.4px}
+    #footerNote{position:absolute;left:108px;bottom:92px;color:#7d8792;font-size:16px;z-index:2}
+    #timeline{position:absolute;left:108px;bottom:147px;display:flex;gap:9px;z-index:2}
+    #timeline i{height:4px;width:70px;border-radius:8px;background:#dde3e6;overflow:hidden}
+    #timeline b{display:block;height:100%;width:100%;background:#0054fd;transform-origin:left}
+    #app{background:#f7f8fa;border-radius:34px;box-shadow:0 30px 80px -20px #24483433,0 0 0 1px #ffffffaa}
+    #app2{overflow:visible}
+    #screenHost,.screen-snapshot{position:absolute;inset:0;display:block}
+    #cursor{width:35px;height:35px;filter:drop-shadow(0 2px 3px #133c2926)}
+    .rip{background:#0054fd22;border:1px solid #0054fd33}
+    #sourceLoader{position:absolute;left:-20000px;top:0;width:430px;height:940px;border:0}
+    #captureTime{position:fixed;right:0;bottom:0;width:1px;height:1px;opacity:.001;border:0;padding:0;z-index:1000}
+  </style>
+</head>
+<body>
+  <div id="frame">
+    <div id="backdrop"></div>
+    <div id="rail"><div id="brandName">Циан</div><div id="railLine"></div><div id="railLabel">Короткая заявка на ипотеку</div></div>
+    <section id="copy"><p id="kicker"></p><h1 id="headline"></h1><p id="description"></p></section>
+    <div id="timeline"></div><p id="footerNote">5 коротких шагов · Без документов</p>
+    <div id="stage" class="layer"><div id="app"><div id="screenHost"></div></div></div>
+    <div id="fdim" class="layer"></div>
+    <div id="stage2" class="layer"><div id="app2"></div></div>
+  </div>
+  <iframe id="sourceLoader" title="Исходный прототип" tabindex="-1" aria-hidden="true"></iframe>
+  <input id="captureTime" type="text" aria-label="Время кадра" value="0" autocomplete="off">
+  <script>
+  (async()=>{
+    const sourceURL = new URL('../../tasks/mortgage-application/index.html',location.href);
+    const [source,experience] = await Promise.all([
+      fetch(sourceURL).then(r=>r.text()),
+      fetch(new URL('experience.css',sourceURL)).then(r=>r.text())
+    ]);
+    const originalCSS = source.match(/<style>([\s\S]*?)<\/style>/)[1];
+    const loader = document.getElementById('sourceLoader');
+    const loaded = new Promise(resolve=>loader.onload=resolve);
+    loader.srcdoc = source.replace('<head>',`<head><base href="${sourceURL}">`)
+      .replace("const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');",'const reducedMotion = {matches:true};')
+      .replace('new Date()',"new Date('2026-11-23T12:00:00+01:00')");
+    await loaded;
+    const overrides = `
+      :host{display:block;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Arial,sans-serif;color:#171b1a;-webkit-font-smoothing:antialiased}
+      *,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important;scroll-behavior:auto!important}
+      .device{width:430px!important;min-height:940px!important;height:940px!important;border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important;overflow:hidden!important}
+      .screen{transform:none!important;opacity:1!important}
+      .is-form h2{font-size:50px}.success-screen h1{font-size:57px}
+      .device:has(.finance-screen) main{zoom:.84}
+    `;
+    const rootStyle = originalCSS.replaceAll(':root',':host')+'\n'+experience+'\n'+overrides;
+    const common = {name:'',email:'alex@example.com',phone:'+7 900 000-00-00',timing:'quarter',object:'yes',income:'200',hasDebts:'no',day:'1',slot:'18:00–21:00',marketing:false,showErrors:false,submitting:false};
+    const states = [
+      {step:0},
+      {step:1,timing:''},{step:1},
+      {step:2,object:''},{step:2},
+      {step:3,income:'',hasDebts:''},{step:3,hasDebts:''},{step:3},
+      {step:4,day:'',slot:''},{step:4,slot:''},{step:4},
+      {step:5},{step:6,name:'Алексей Смирнов'}
+    ];
+    const snapshots = [];
+    for(const state of states){
+      loader.contentWindow.eval(`Object.assign(state,${JSON.stringify({...common,...state})});render();`);
+      const host = document.createElement('div');
+      host.className='screen-snapshot';host.style.display='none';
+      const shadow = host.attachShadow({mode:'open'});
+      const style = document.createElement('style');style.textContent=rootStyle;
+      shadow.append(style,loader.contentDocument.querySelector('.device').cloneNode(true));
+      document.getElementById('screenHost').append(host);snapshots.push({host,root:shadow});
+    }
+    loader.remove();
+    window.SOURCE_SCREENS=states.length;
+    const copy = [
+      [0,2,'ИПОТЕКА · ЦИАН','Свой дом.','Свой ритм.','От первого расчёта — к своей ипотеке.'],
+      [2,3.45,'01 / ВАШ ПЛАН','Свой дом.','В своё время.','Когда вы хотели бы купить квартиру?'],
+      [3.45,5,'02 / ВАША КВАРТИРА','Уже нашли?','Или ищем?','Сдвиньте ползунок туда, где вы сейчас.'],
+      [5,7,'03 / ФИНАНСЫ','Ваши цифры.','Без справок.','Какой у вас доход в месяц? Примерно — достаточно.'],
+      [7,10,'04 / КОРОТКИЙ ЗВОНОК','Поговорим.','Когда удобно?','Позвоним только в выбранное окно.'],
+      [10,12,'05 / ПОСЛЕДНИЙ ШТРИХ','Почти дома.','Как вас зовут?','Оставьте контакты. Дальше поможет эксперт.'],
+      [12,15,'ГОТОВО / ДАЛЬШЕ ВМЕСТЕ','Вы сделали','первый шаг.','Заявка у эксперта. Позвоним в выбранное время.']
+    ];
+    const timeline=document.getElementById('timeline');
+    for(let i=0;i<5;i++){const el=document.createElement('i');el.innerHTML='<b></b>';timeline.append(el);}
+    const getScreen = t=>t<2?0:t<3.45?(t<2.65?1:2):t<5?(t<4.05?3:4):t<7?(t<5.6?5:t<6.15?6:7):t<10?(t<7.55?8:t<8.55?9:10):t<12?11:12;
+    const query=(i,s)=>snapshots[i].root.querySelector(s);
+    let activeCopy=-1;
+    let targets;
+    E.start({
+      setup(E){
+        const bounds=(i,sel)=>{E.measureAt(1);snapshots.forEach((s,n)=>s.host.style.display=n===i?'block':'none');return E.rect(query(i,sel));};
+        targets={entry:bounds(0,'.calculation-action'),timing:bounds(2,'[data-choice="quarter"]'),object:bounds(4,'.swipe-track'),income:bounds(6,'[data-chip="200"]'),debts:bounds(7,'[data-choice="no"]'),day:bounds(9,'[data-day="1"]'),slot:bounds(10,'[data-slot="18:00–21:00"]'),name:bounds(11,'#name'),submit:bounds(11,'#next'),success:bounds(12,'.success-panel')};
+        const centered=(t,scale,offset=0)=>[t,215,470+offset,scale];
+        E.anchor([1390,540]);
+        const camera=[centered(0,.91),centered(1.6,.95,14),centered(2,.94),centered(3.15,.96),centered(3.45,.94),centered(4.7,.97),centered(5,.94),centered(6.6,.98,16),centered(7,.94),centered(9.5,.98,24),centered(10,.94),centered(11.7,.97,16),centered(12,.94),centered(12.65,.95),centered(15,.95)];
+        E.camera(camera,camera);
+        const point=(t,key,opacity=1,dx=0,dy=0)=>[t,targets[key].cx+dx,targets[key].cy+dy,opacity];
+        E.cursor([
+          point(0,'entry',0,80,35),point(.85,'entry',0,80,35),point(1.35,'entry'),point(1.75,'entry'),point(1.98,'entry',0,40,20),
+          point(2.15,'timing',0,70,30),point(2.5,'timing'),point(2.8,'timing'),point(3.2,'timing',0,45,20),
+          point(3.5,'object',0,50,25),point(3.78,'object'),[4.05,targets.object.x,targets.object.cy,1],[4.3,targets.object.x,targets.object.cy,1],[4.7,targets.object.x,targets.object.cy,0],
+          point(5.05,'income',0,35,20),point(5.48,'income'),point(5.7,'income'),point(6.03,'debts'),point(6.25,'debts'),point(6.65,'debts',0,40,20),
+          point(7.02,'day',0,50,20),point(7.42,'day'),point(7.7,'day'),point(8.39,'slot'),point(8.8,'slot'),point(9.4,'slot',0,40,20),
+          point(10,'name',0,35,25),point(10.15,'name'),point(10.4,'name'),point(10.85,'submit'),point(11.2,'submit'),point(11.65,'submit',0,40,0),point(15,'submit',0)
+        ]);
+        E.clicks([1.55,2.65,4.05,5.6,6.15,7.55,8.55,10.15,11.3]);
+        window.MOTION_TARGETS=targets;
+      },
+      scene(t,E){
+        const index=getScreen(t);
+        snapshots.forEach((s,i)=>s.host.style.display=i===index?'block':'none');
+        const rowIndex=copy.findIndex(r=>t>=r[0]&&t<r[1]);
+        const ci=rowIndex<0?copy.length-1:rowIndex;
+        const row=copy[ci];
+        if(activeCopy!==ci){
+          document.getElementById('kicker').textContent=row[2];
+          document.getElementById('headline').innerHTML=row[3]+'<span>'+row[4]+'</span>';
+          document.getElementById('description').textContent=row[5];activeCopy=ci;
+        }
+        const incoming=E.MEAS?1:E.eout(E.lin(t,row[0],row[0]+.32));
+        const outgoing=ci===copy.length-1?1:1-E.eio(E.lin(t,row[1]-.16,row[1]));
+        const fade=(.22+.78*incoming)*outgoing;
+        E.css(document.getElementById('copy'),{opacity:fade,transform:`translateY(${(1-incoming)*16}px)`});
+        const bars=timeline.querySelectorAll('b');
+        bars.forEach((bar,i)=>bar.style.transform=`scaleX(${E.lin(t,2+i*2,4+i*2)})`);
+        const sw=query(3,'[data-object-swipe]');
+        sw.style.setProperty('--swipe-position',`${50*(1-E.eio(E.lin(t,3.8,4.05)))}%`);
+        const contact=snapshots[11].root;
+        contact.querySelector('#name').value=E.typed(t,10.15,10.95,'Алексей Смирнов');
+        const button=contact.querySelector('#next');
+        button.textContent=t>=11.3?'Передаём заявку…':'Отправить заявку';
+        button.style.opacity=t>=11.3?'.65':'1';
+        const pressed=1-.025*E.bump(t,11.25,11.52);
+        button.style.transform=`scale(${pressed})`;
+        if(index===0){
+          const progress=E.eout(E.lin(t,.08,1.15));
+          query(0,'#paymentAmount').textContent=new Intl.NumberFormat('ru-RU').format(Math.round(62400*progress/100)*100);
+          query(0,'#calculationCurve').style.strokeDashoffset=String(1-progress);
+        }
+        if(index===12){
+          const progress=E.eout(E.lin(t,12.02,12.55));
+          query(12,'.success-orbit').style.transform=`scale(${.88+.12*progress})`;
+          query(12,'.success-orbit path').style.strokeDashoffset=String(65*(1-progress));
+        }
+        document.getElementById('footerNote').textContent=t<12?'5 коротких шагов · Без документов':'Короткая заявка на ипотеку · Циан';
+        window.MOTION_FRAME={time:t,screen:index,scene:ci};
+        document.getElementById('frame').dataset.time=String(t);
+        document.getElementById('frame').dataset.screen=String(index);
+      }
+    });
+    const capture=document.getElementById('captureTime');
+    capture.addEventListener('input',()=>window.render(Number(capture.value)||0));
+    const initial=Number(new URLSearchParams(location.search).get('t')||0);
+    const check=()=>{if(window.READY){window.render(initial);capture.value=String(initial);document.documentElement.dataset.motionReady='true';}else requestAnimationFrame(check);};check();
+  })().catch(error=>{document.body.dataset.error=error.message;console.error(error);});
+  </script>
+</body>
+</html>
