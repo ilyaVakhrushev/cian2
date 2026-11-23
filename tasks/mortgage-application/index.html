@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Циан · Короткая заявка на ипотеку</title>
+    <style>
+      :root {
+        --cian: #0054fd;
+        --cian-strong: #0043cd;
+        --cian-soft: #e9efff;
+        --ink: #171b1a;
+        --muted: #69716e;
+        --line: #e2e7e4;
+        --surface: #ffffff;
+        --canvas: #f4f6f5;
+        --danger: #d64242;
+        --shadow: 0 16px 44px rgba(31, 47, 40, 0.13);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 4%, rgba(0, 84, 253, 0.09), transparent 24rem),
+          var(--canvas);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, Arial, sans-serif;
+      }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .stage { min-height: 100vh; display: grid; place-items: center; padding: 28px 18px; }
+      .device {
+        width: min(100%, 430px);
+        min-height: 844px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(19, 31, 26, 0.08);
+        border-radius: 34px;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .topbar {
+        padding: 18px 20px 10px;
+        background: rgba(255,255,255,0.94);
+      }
+      .brand-row { display: flex; align-items: center; justify-content: space-between; min-height: 28px; }
+      .wordmark { color: var(--cian); font-size: 25px; font-weight: 750; letter-spacing: -1.3px; }
+      .source-pill { color: #365bab; background: var(--cian-soft); padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 650; }
+      .progress-wrap { padding-top: 14px; }
+      .progress-label { display: flex; justify-content: space-between; color: var(--muted); font-size: 13px; }
+      .progress { height: 4px; margin-top: 8px; border-radius: 9px; background: #eaf0ed; overflow: hidden; }
+      .progress > span { display: block; height: 100%; width: 0; background: var(--cian); border-radius: inherit; transition: width 360ms cubic-bezier(.2,.8,.2,1); }
+      main { flex: 1; display: flex; flex-direction: column; padding: 12px 20px 0; }
+      .content { flex: 1; display: flex; flex-direction: column; }
+      .screen { animation: reveal 420ms cubic-bezier(.2,.8,.2,1) both; }
+      .screen.enter-forward { animation-name: enterForward; }
+      .screen.enter-back { animation-name: enterBack; }
+      .screen > * { animation: childReveal 440ms cubic-bezier(.2,.8,.2,1) both; }
+      .screen > *:nth-child(1) { animation-delay: 20ms; }
+      .screen > *:nth-child(2) { animation-delay: 65ms; }
+      .screen > *:nth-child(3) { animation-delay: 110ms; }
+      .screen > *:nth-child(4) { animation-delay: 155ms; }
+      .screen > *:nth-child(5) { animation-delay: 200ms; }
+      @keyframes reveal { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes enterForward { from { opacity: 0; transform: translate3d(22px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+      @keyframes enterBack { from { opacity: 0; transform: translate3d(-18px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+      @keyframes childReveal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .eyebrow { color: var(--cian-strong); font-size: 14px; font-weight: 680; margin: 0 0 10px; }
+      h1 { font-size: 31px; line-height: 1.1; letter-spacing: -1.15px; margin: 0; font-weight: 740; }
+      h2 { font-size: 24px; line-height: 1.17; letter-spacing: -0.6px; margin: 0; font-weight: 720; }
+      .lead { margin: 12px 0 0; color: var(--muted); line-height: 1.48; font-size: 16px; }
+      .estimate {
+        margin-top: 25px;
+        padding: 18px;
+        background: linear-gradient(145deg, #e7f8ef, #f5fcf8);
+        border-radius: 22px;
+      }
+      .estimate small { color: #50628e; font-size: 13px; }
+      .estimate b { display: block; margin-top: 4px; font-size: 28px; letter-spacing: -0.8px; }
+      .estimate p { margin: 7px 0 0; color: #50628e; font-size: 13px; line-height: 1.35; }
+      .mini-benefits { display: grid; gap: 10px; margin-top: 22px; }
+      .mini-benefit { display: flex; gap: 10px; align-items: center; color: #46514c; font-size: 14px; }
+      .dot { width: 9px; height: 9px; flex: 0 0 9px; border-radius: 50%; background: var(--cian); box-shadow: 0 0 0 5px var(--cian-soft); }
+      .form { margin-top: 25px; display: grid; gap: 16px; }
+      .field { display: grid; gap: 7px; }
+      .field label { font-size: 14px; font-weight: 650; }
+      .field input { width: 100%; border: 1px solid var(--line); border-radius: 14px; padding: 14px 14px; background: #fff; color: var(--ink); outline: none; font-size: 16px; transition: border-color 150ms, box-shadow 150ms; }
+      .field input:focus { border-color: var(--cian); box-shadow: 0 0 0 4px rgba(0,166,106,0.13); }
+      .field input[readonly] { color: var(--muted); background: #f7f9f8; }
+      .hint { color: var(--muted); font-size: 12px; line-height: 1.35; }
+      .error { color: var(--danger); font-size: 13px; min-height: 18px; }
+      .choices { display: grid; gap: 10px; margin-top: 23px; }
+      .choice {
+        min-height: 60px;
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        padding: 14px 15px;
+        color: var(--ink); text-align: left;
+        background: #fff; border: 1px solid var(--line); border-radius: 17px;
+        transition: transform 150ms, border-color 150ms, background 150ms;
+      }
+      .choice:hover { transform: translateY(-1px); }
+      .choice[aria-pressed="true"] { border-color: var(--cian); background: var(--cian-soft); animation: choiceSet 300ms cubic-bezier(.2,.9,.2,1); }
+      .choice strong { font-size: 16px; font-weight: 650; }
+      .choice span { color: var(--muted); font-size: 13px; }
+      .choice[aria-pressed="true"] .check { background: var(--cian); color: #fff; animation: checkPop 320ms cubic-bezier(.2,1.35,.2,1); }
+      @keyframes choiceSet { 0% { transform: scale(.985); } 70% { transform: scale(1.012); } 100% { transform: scale(1); } }
+      @keyframes checkPop { from { transform: scale(.45); } to { transform: scale(1); } }
+      .check { width: 22px; height: 22px; display: grid; place-items: center; flex: 0 0 22px; border: 1px solid #cbd5d0; border-radius: 50%; color: transparent; font-size: 13px; font-weight: 800; }
+      .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 23px; }
+      .chip { min-height: 54px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); text-align: left; padding: 12px; font-size: 15px; font-weight: 620; }
+      .chip[aria-pressed="true"] { border-color: var(--cian); background: var(--cian-soft); color: var(--cian-strong); animation: choiceSet 300ms cubic-bezier(.2,.9,.2,1); }
+      .soft-note { margin-top: 18px; padding: 14px; border-radius: 15px; color: #4e5f8c; background: #f3f6ff; font-size: 14px; line-height: 1.4; }
+      .result-card { margin-top: 22px; padding: 17px; border-radius: 20px; background: linear-gradient(145deg, #f2f5ff, #e6edff); color: #264c9d; animation: resultIn 520ms cubic-bezier(.2,1.05,.2,1); }
+      .result-card b { display: block; color: #153b8e; font-size: 18px; margin-bottom: 5px; }
+      .result-card p { margin: 0; line-height: 1.4; font-size: 14px; }
+      @keyframes resultIn { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      .schedule-days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 22px; }
+      .day { min-height: 72px; border: 1px solid var(--line); border-radius: 15px; background: #fff; color: var(--ink); padding: 9px 5px; }
+      .day small, .day b { display: block; }
+      .day small { color: var(--muted); font-size: 12px; }
+      .day b { font-size: 16px; margin-top: 3px; }
+      .day[aria-pressed="true"] { background: var(--cian-soft); border-color: var(--cian); color: var(--cian-strong); }
+      .slots { display: grid; gap: 9px; margin-top: 13px; }
+      .slot { min-height: 49px; padding: 0 14px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); text-align: left; font-size: 15px; font-weight: 620; }
+      .slot[aria-pressed="true"] { color: var(--cian-strong); border-color: var(--cian); background: var(--cian-soft); }
+      .consent { display: flex; align-items: flex-start; gap: 11px; margin-top: 21px; padding: 14px 0; border-top: 1px solid var(--line); color: #4f5a55; font-size: 13px; line-height: 1.42; }
+      .consent input { width: 21px; height: 21px; flex: 0 0 21px; margin: 0; accent-color: var(--cian); }
+      .consent a { color: var(--cian-strong); text-decoration: none; }
+      .footer { padding: 14px 20px max(20px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(255,255,255,0), #fff 22%); }
+      .actions { display: grid; gap: 9px; }
+      .primary { min-height: 54px; width: 100%; border: 0; border-radius: 16px; background: var(--cian); color: #fff; font-size: 16px; font-weight: 700; box-shadow: 0 7px 17px rgba(0,84,253,.2); }
+      .primary:hover { background: var(--cian-strong); }
+      .primary:active { transform: scale(.985); }
+      .primary:disabled { opacity: .78; cursor: wait; }
+      .secondary { min-height: 34px; border: 0; background: transparent; color: #59635f; font-size: 14px; }
+      .back { min-height: 42px; border: 0; background: transparent; color: #59635f; font-size: 14px; text-align: left; padding: 0; }
+      .legal { color: var(--muted); font-size: 12px; text-align: center; line-height: 1.35; margin: 0; }
+      .success { display: grid; place-content: center; flex: 1; text-align: center; padding: 12px 8px 44px; }
+      .success-mark { width: 84px; height: 84px; margin: 0 auto 20px; display: grid; place-items: center; border-radius: 30px; background: var(--cian-soft); color: var(--cian-strong); font-size: 38px; font-weight: 800; transform: rotate(-8deg); animation: successStamp 700ms cubic-bezier(.2,1.3,.2,1) both; }
+      @keyframes successStamp { 0% { opacity: 0; transform: rotate(-18deg) scale(.45); box-shadow: 0 0 0 0 rgba(0,84,253,.26); } 58% { opacity: 1; transform: rotate(-5deg) scale(1.08); box-shadow: 0 0 0 16px rgba(0,84,253,0); } 100% { transform: rotate(-8deg) scale(1); box-shadow: 0 0 0 22px rgba(0,84,253,0); } }
+      .success p { margin: 13px auto 0; max-width: 330px; color: var(--muted); line-height: 1.48; }
+      .call-summary { margin-top: 24px; padding: 16px; border-radius: 18px; background: #f3f6ff; color: #34528f; text-align: left; }
+      .call-summary small { color: var(--muted); }
+      .call-summary b { display: block; margin-top: 5px; color: var(--ink); }
+      @media (max-width: 480px) {
+        .stage { padding: 0; }
+        .device { width: 100%; min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage">
+      <section class="device" aria-label="Короткая ипотечная анкета Циан">
+        <header class="topbar">
+          <div class="brand-row"><div class="wordmark">Циан</div><div class="source-pill">Ипотечный калькулятор</div></div>
+          <div class="progress-wrap" id="progressWrap">
+            <div class="progress-label"><span id="stepLabel">Короткая заявка</span><span id="stepCount">1 из 7</span></div>
+            <div class="progress" role="progressbar" aria-label="Прогресс анкеты" aria-valuemin="1" aria-valuemax="7" aria-valuenow="1"><span id="progressBar"></span></div>
+          </div>
+        </header>
+        <main>
+          <div class="content" id="content" aria-live="polite"></div>
+        </main>
+        <footer class="footer" id="footer"></footer>
+      </section>
+    </div>
+    <script>
+      const state = {
+        step: 0,
+        name: '', email: 'ilya@example.com', phone: '+7 900 555-21-20',
+        timing: '', object: '', consultant: '', income: '', hasDebts: '', debtPayment: '',
+        day: '', slot: '', marketing: false, showErrors: false, transition: 'forward', submitting: false
+      };
+      const totalSteps = 7;
+      const content = document.getElementById('content');
+      const footer = document.getElementById('footer');
+      const progressBar = document.getElementById('progressBar');
+      const stepCount = document.getElementById('stepCount');
+      const stepLabel = document.getElementById('stepLabel');
+      const progressWrap = document.getElementById('progressWrap');
+      const days = [
+        { label: 'Сегодня', date: '23 ноября' },
+        { label: 'Завтра', date: '24 ноября' },
+        { label: 'Вт', date: '25 ноября' }
+      ];
+      const slots = ['10:00–12:00', '12:00–15:00', '18:00–21:00'];
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+      }
+      function choice(label, value, selected, note = '') {
+        return `<button class="choice" type="button" data-choice="${value}" aria-pressed="${selected}"><span><strong>${label}</strong>${note ? `<span>${note}</span>` : ''}</span><i class="check" aria-hidden="true">✓</i></button>`;
+      }
+      function chip(label, value, selected) {
+        return `<button class="chip" type="button" data-chip="${value}" aria-pressed="${selected}">${label}</button>`;
+      }
+      function validate() {
+        if (state.step === 1) {
+          const nameOk = state.name.trim().split(/\s+/).filter(Boolean).length >= 2;
+          const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+          return nameOk && emailOk;
+        }
+        if (state.step === 2) return Boolean(state.timing);
+        if (state.step === 3) return Boolean(state.object);
+        if (state.step === 4) return Boolean(state.consultant);
+        if (state.step === 5) return Boolean(state.income) && Boolean(state.hasDebts) && (state.hasDebts === 'no' || Number(state.debtPayment.replace(/\s/g,'')) > 0);
+        if (state.step === 6) return Boolean(state.day && state.slot);
+        return true;
+      }
+      function updateProgress() {
+        if (state.step === 7) { progressWrap.style.visibility = 'hidden'; return; }
+        progressWrap.style.visibility = 'visible';
+        const shown = Math.max(1, state.step);
+        progressBar.style.width = `${(shown / totalSteps) * 100}%`;
+        progressBar.parentElement.setAttribute('aria-valuenow', String(shown));
+        stepCount.textContent = `${shown} из ${totalSteps}`;
+        stepLabel.textContent = state.step === 0 ? 'Короткая заявка' : 'Анкета для эксперта';
+      }
+      function render() {
+        updateProgress();
+        let html = '';
+        let actions = '';
+        if (state.step === 0) {
+          html = `<section class="screen"><p class="eyebrow">Ипотека в Циане</p><h1>Поможем сделать следующий шаг</h1><p class="lead">Ответьте на несколько вопросов — эксперт подберёт варианты под вашу ситуацию.</p><div class="estimate"><small>Вы рассчитали платёж</small><b>от 62 400 ₽ в месяц</b><p>Ориентир по вашим параметрам. Решение банка может отличаться.</p></div><div class="mini-benefits"><div class="mini-benefit"><i class="dot"></i>Займёт около 2 минут</div><div class="mini-benefit"><i class="dot"></i>Без паспорта и документов</div><div class="mini-benefit"><i class="dot"></i>Остальное уточнит брокер</div></div></section>`;
+          actions = `<button class="primary" id="next">Продолжить</button><p class="legal">Продолжая, вы соглашаетесь на обработку данных для заявки.</p>`;
+        }
+        if (state.step === 1) {
+          const nameErr = state.showErrors && state.name.trim().split(/\s+/).filter(Boolean).length < 2;
+          const emailErr = state.showErrors && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+          html = `<section class="screen"><p class="eyebrow">Контакты</p><h2>Как к вам обращаться?</h2><p class="lead">Возьмём данные из профиля — вы сможете исправить почту.</p><div class="form"><div class="field"><label for="name">ФИО</label><input id="name" autocomplete="name" placeholder="Например, Илья Петров" value="${escapeHtml(state.name)}" /><div class="error">${nameErr ? 'Укажите хотя бы имя и фамилию' : ''}</div></div><div class="field"><label for="email">Почта</label><input id="email" type="email" autocomplete="email" value="${escapeHtml(state.email)}" /><div class="error">${emailErr ? 'Проверьте адрес почты' : ''}</div></div><div class="field"><label for="phone">Телефон</label><input id="phone" readonly value="${state.phone}" /><span class="hint">На него позвонит эксперт. Изменить номер можно в профиле.</span></div></div></section>`;
+          actions = navActions('Продолжить');
+        }
+        if (state.step === 2) {
+          html = `<section class="screen"><p class="eyebrow">Планы</p><h2>Когда планируете покупку?</h2><p class="lead">Так эксперт поймёт, с чего начать разговор.</p><div class="choices">${choice('В течение месяца','month',state.timing==='month')}${choice('Через 1–3 месяца','quarter',state.timing==='quarter')}${choice('Через 3–6 месяцев','half',state.timing==='half')}${choice('Просто изучаю','explore',state.timing==='explore')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          actions = navActions('Продолжить');
+        }
+        if (state.step === 3) {
+          html = `<section class="screen"><p class="eyebrow">Объект</p><h2>Уже выбрали квартиру?</h2><p class="lead">Можно ответить сейчас — это ни к чему не обязывает.</p><div class="choices">${choice('Да, объект уже есть','yes',state.object==='yes','Учтём параметры квартиры')}${choice('Пока выбираю','choosing',state.object==='choosing','Подскажем, на что смотреть')}${choice('Хочу понять бюджет','budget',state.object==='budget','Оценим реалистичные варианты')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          actions = navActions('Продолжить');
+        }
+        if (state.step === 4) {
+          html = `<section class="screen"><p class="eyebrow">Подбор квартиры</p><h2>Нужна помощь с поиском?</h2><p class="lead">Для семейной ипотеки и новостроек можем подключить консультанта.</p><div class="choices">${choice('Да, помогите подобрать','yes',state.consultant==='yes','Консультант учтёт условия семейной ипотеки')}${choice('Нет, объект найду сам','no',state.consultant==='no')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          actions = navActions('Продолжить');
+        }
+        if (state.step === 5) {
+          html = `<section class="screen"><p class="eyebrow">Финансы</p><h2>Какой у вас доход в месяц?</h2><p class="lead">Достаточно примерной суммы — без справок и документов.</p><div class="choice-grid">${chip('До 100 000 ₽','100',state.income==='100')}${chip('100–200 тыс. ₽','200',state.income==='200')}${chip('200–350 тыс. ₽','350',state.income==='350')}${chip('Больше 350 тыс. ₽','350plus',state.income==='350plus')}</div><div class="soft-note">Доход не влияет на решение автоматически — он нужен, чтобы разговор с экспертом был предметнее.</div><div class="choices" style="margin-top:16px">${choice('Есть кредиты','yes',state.hasDebts==='yes')}${choice('Кредитов нет','no',state.hasDebts==='no')}</div>${state.hasDebts==='yes' ? `<div class="field" style="margin-top:14px"><label for="debt">Ежемесячный платёж по кредитам</label><input id="debt" inputmode="numeric" placeholder="Например, 18 000" value="${escapeHtml(state.debtPayment)}" /><div class="error">${state.showErrors && Number(state.debtPayment.replace(/\s/g,'')) <= 0 ? 'Укажите ежемесячный платёж' : ''}</div></div>` : ''}${state.showErrors && (!state.income || !state.hasDebts) ? '<div class="error" role="alert">Выберите доход и укажите, есть ли кредиты</div>' : ''}${state.income && state.hasDebts ? `<div class="result-card"><b>Предварительный ориентир готов</b><p>Эксперт уже сможет обсудить подходящие программы и уточнить детали, влияющие на ставку.</p></div>` : ''}</section>`;
+          actions = navActions('Посмотреть ориентир');
+        }
+        if (state.step === 6) {
+          html = `<section class="screen"><p class="eyebrow">Звонок эксперта</p><h2>Когда вам удобно поговорить?</h2><p class="lead">Выберите время в ближайшие три дня. Эксперт позвонит на номер из профиля.</p><div class="schedule-days">${days.map((day,i)=>`<button class="day" type="button" data-day="${i}" aria-pressed="${state.day===String(i)}"><small>${day.label}</small><b>${day.date}</b></button>`).join('')}</div>${state.day !== '' ? `<div class="slots">${slots.map(slot=>`<button class="slot" type="button" data-slot="${slot}" aria-pressed="${state.slot===slot}">${slot}</button>`).join('')}</div>` : ''}${state.showErrors ? '<div class="error" role="alert">Выберите дату и время звонка</div>' : ''}<label class="consent"><input id="marketing" type="checkbox" ${state.marketing ? 'checked' : ''} /><span>Хочу получать полезные материалы об ипотеке и подборе жилья. Это необязательно.</span></label></section>`;
+          actions = navActions('Отправить заявку', true);
+        }
+        if (state.step === 7) {
+          const day = days[Number(state.day)];
+          html = `<section class="success screen"><div class="success-mark" aria-hidden="true">✓</div><p class="eyebrow">Заявка у эксперта</p><h1>Всё получилось</h1><p>Мы передали ответы ипотечному брокеру-партнёру. Он уточнит детали и поможет с дальнейшими шагами.</p><div class="call-summary"><small>Эксперт позвонит</small><b>${day.label}, ${day.date} · ${state.slot}</b></div></section>`;
+          actions = `<button class="primary" id="restart">Вернуться к расчёту</button><p class="legal">Вы всегда можете изменить данные в профиле Циана.</p>`;
+        }
+        content.innerHTML = html;
+        const screen = content.querySelector('.screen');
+        if (screen) screen.classList.add(`enter-${state.transition}`);
+        footer.innerHTML = `<div class="actions">${actions}</div>`;
+        bind();
+      }
+      function navActions(label, final = false) {
+        const actionLabel = final && state.submitting ? 'Передаём заявку…' : label;
+        return `${state.step > 0 ? '<button class="back" id="back">← Назад</button>' : ''}<button class="primary" id="next" ${state.submitting ? 'disabled aria-busy="true"' : ''}>${actionLabel}</button>${final ? '<p class="legal">Нажимая «Отправить заявку», вы принимаете <a href="#" onclick="return false">условия сервиса</a> и <a href="#" onclick="return false">политику обработки данных</a>.</p>' : ''}`;
+      }
+      function showFieldErrors() {
+        if (state.step === 1) { state.name = state.name.trim(); state.email = state.email.trim(); }
+        state.showErrors = true;
+        render();
+      }
+      function bind() {
+        const name = document.getElementById('name');
+        const email = document.getElementById('email');
+        const debt = document.getElementById('debt');
+        if (name) name.addEventListener('input', e => state.name = e.target.value);
+        if (email) email.addEventListener('input', e => state.email = e.target.value);
+        if (debt) debt.addEventListener('input', e => state.debtPayment = e.target.value.replace(/[^0-9 ]/g, ''));
+        document.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
+          const value = button.dataset.choice;
+          if (state.step === 2) state.timing = value;
+          if (state.step === 3) state.object = value;
+          if (state.step === 4) state.consultant = value;
+          if (state.step === 5) { state.hasDebts = value; if (value === 'no') state.debtPayment = ''; }
+          render();
+        }));
+        document.querySelectorAll('[data-chip]').forEach(button => button.addEventListener('click', () => { state.income = button.dataset.chip; render(); }));
+        document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => { state.day = button.dataset.day; state.slot = ''; render(); }));
+        document.querySelectorAll('[data-slot]').forEach(button => button.addEventListener('click', () => { state.slot = button.dataset.slot; render(); }));
+        const marketing = document.getElementById('marketing');
+        if (marketing) marketing.addEventListener('change', e => state.marketing = e.target.checked);
+        const back = document.getElementById('back');
+        if (back) back.addEventListener('click', () => { state.showErrors = false; state.transition = 'back'; state.step--; render(); });
+        const next = document.getElementById('next');
+        if (next) next.addEventListener('click', () => {
+          if (!validate()) { showFieldErrors(); return; }
+          state.showErrors = false;
+          state.transition = 'forward';
+          if (state.step === 6) {
+            state.submitting = true;
+            render();
+            window.setTimeout(() => { state.submitting = false; state.step++; render(); }, 650);
+            return;
+          }
+          state.step++;
+          render();
+        });
+        const restart = document.getElementById('restart');
+        if (restart) restart.addEventListener('click', () => { Object.assign(state, { step: 0, name: '', email: 'ilya@example.com', timing: '', object: '', consultant: '', income: '', hasDebts: '', debtPayment: '', day: '', slot: '', marketing: false, showErrors: false, transition: 'back', submitting: false }); render(); });
+      }
+      render();
+    </script>
+  </body>
+</html>
