@@ -73,12 +73,12 @@
       .screen { animation: reveal 420ms cubic-bezier(.2,.8,.2,1) both; }
       .screen.enter-forward { animation-name: enterForward; }
       .screen.enter-back { animation-name: enterBack; }
-      .screen > * { animation: childReveal 440ms cubic-bezier(.2,.8,.2,1) both; }
-      .screen > *:nth-child(1) { animation-delay: 20ms; }
-      .screen > *:nth-child(2) { animation-delay: 65ms; }
-      .screen > *:nth-child(3) { animation-delay: 110ms; }
-      .screen > *:nth-child(4) { animation-delay: 155ms; }
-      .screen > *:nth-child(5) { animation-delay: 200ms; }
+      .screen:not(.welcome-screen) > * { animation: childReveal 440ms cubic-bezier(.2,.8,.2,1) both; }
+      .screen:not(.welcome-screen) > *:nth-child(1) { animation-delay: 20ms; }
+      .screen:not(.welcome-screen) > *:nth-child(2) { animation-delay: 65ms; }
+      .screen:not(.welcome-screen) > *:nth-child(3) { animation-delay: 110ms; }
+      .screen:not(.welcome-screen) > *:nth-child(4) { animation-delay: 155ms; }
+      .screen:not(.welcome-screen) > *:nth-child(5) { animation-delay: 200ms; }
       @keyframes reveal { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes enterForward { from { opacity: 0; transform: translate3d(22px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
       @keyframes enterBack { from { opacity: 0; transform: translate3d(-18px, 0, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
@@ -87,6 +87,12 @@
       h1 { font-size: 31px; line-height: 1.1; letter-spacing: -1.15px; margin: 0; font-weight: 740; }
       h2 { font-size: 24px; line-height: 1.17; letter-spacing: -0.6px; margin: 0; font-weight: 720; }
       .lead { margin: 12px 0 0; color: var(--muted); line-height: 1.48; font-size: 16px; }
+      .quest-panel { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:0 0 18px; padding:11px 13px; border:1px solid rgba(255,255,255,.8); border-radius:18px; background:linear-gradient(120deg,rgba(255,255,255,.66),rgba(231,238,255,.5)); box-shadow:0 8px 18px rgba(36,69,139,.08),inset 0 1px 0 rgba(255,255,255,.8); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); }
+      .quest-panel span { display:block; color:#5b6c98; font-size:11px; font-weight:680; }
+      .quest-panel b { display:block; margin-top:2px; color:#1d3673; font-size:14px; letter-spacing:-.2px; }
+      .quest-track { display:flex; gap:4px; }
+      .quest-track i { width:8px; height:8px; border-radius:50%; background:rgba(87,111,171,.2); transition:background 180ms, transform 180ms; }
+      .quest-track i.is-done { background:var(--cian); transform:scale(1.2); box-shadow:0 0 0 3px rgba(0,84,253,.1); }
       .estimate {
         margin-top: 25px;
         padding: 18px;
@@ -103,8 +109,9 @@
       .mini-benefits { display: grid; gap: 10px; margin-top: 22px; }
       .mini-benefit { display: flex; gap: 10px; align-items: center; color: #46514c; font-size: 14px; }
       .dot { width: 9px; height: 9px; flex: 0 0 9px; border-radius: 50%; background: var(--cian); box-shadow: 0 0 0 5px var(--cian-soft); }
-      .form { margin-top: 25px; display: grid; gap: 16px; }
-      .field { display: grid; gap: 7px; }
+      .form { margin-top: 25px; display: grid; grid-template-columns:1fr 1fr; gap: 11px; }
+      .field { display: grid; gap: 7px; padding:13px; border:1px solid rgba(255,255,255,.78); border-radius:18px; background:rgba(255,255,255,.38); box-shadow:0 8px 17px rgba(39,68,128,.06),inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px); }
+      .form .field:first-child { grid-column:1 / -1; }
       .field label { font-size: 14px; font-weight: 650; }
       .field input { width: 100%; border: 1px solid rgba(255,255,255,.86); border-radius: 14px; padding: 14px 14px; background: rgba(255,255,255,.54); color: var(--ink); outline: none; font-size: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,.62); backdrop-filter: blur(13px); -webkit-backdrop-filter: blur(13px); transition: border-color 150ms, box-shadow 150ms, background 150ms; }
       .field input:focus { border-color: rgba(0,84,253,.72); background: rgba(255,255,255,.76); box-shadow: 0 0 0 4px rgba(0,84,253,0.13), inset 0 1px 0 rgba(255,255,255,.72); }
@@ -124,14 +131,24 @@
       }
       .choice:hover { transform: translateY(-2px); box-shadow: 0 11px 22px rgba(40,66,119,.11), inset 0 1px 0 rgba(255,255,255,.8); }
       .choice[aria-pressed="true"] { border-color: rgba(0,84,253,.42); background: rgba(234,240,255,.64); box-shadow: 0 10px 23px rgba(0,84,253,.14), inset 0 1px 0 rgba(255,255,255,.85); animation: choiceSet 300ms cubic-bezier(.2,.9,.2,1); }
-      .choice strong { font-size: 16px; font-weight: 650; }
-      .choice span { color: var(--muted); font-size: 13px; }
+      .choices .choice:nth-child(4n + 1) { background:linear-gradient(135deg,rgba(255,226,203,.72),rgba(255,246,235,.46)); }
+      .choices .choice:nth-child(4n + 2) { background:linear-gradient(135deg,rgba(207,235,255,.74),rgba(240,248,255,.44)); }
+      .choices .choice:nth-child(4n + 3) { background:linear-gradient(135deg,rgba(225,216,255,.7),rgba(248,245,255,.46)); }
+      .choices .choice:nth-child(4n + 4) { background:linear-gradient(135deg,rgba(210,244,230,.72),rgba(241,252,246,.46)); }
+      .choices .choice[aria-pressed="true"], .choice-grid .chip[aria-pressed="true"] { background:linear-gradient(135deg,rgba(222,233,255,.88),rgba(245,248,255,.72)); }
+      .choice > span { display: grid; min-width: 0; gap: 4px; }
+      .choice > span > strong { display: block; color: var(--ink); font-size: 16px; font-weight: 650; line-height: 1.15; }
+      .choice > span > span { display: block; color: var(--muted); font-size: 13px; line-height: 1.28; }
       .choice[aria-pressed="true"] .check { background: var(--cian); color: #fff; animation: checkPop 320ms cubic-bezier(.2,1.35,.2,1); }
       @keyframes choiceSet { 0% { transform: scale(.985); } 70% { transform: scale(1.012); } 100% { transform: scale(1); } }
       @keyframes checkPop { from { transform: scale(.45); } to { transform: scale(1); } }
       .check { width: 22px; height: 22px; display: grid; place-items: center; flex: 0 0 22px; border: 1px solid #cbd5d0; border-radius: 50%; color: transparent; font-size: 13px; font-weight: 800; }
       .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 23px; }
-      .chip { min-height: 54px; border: 1px solid rgba(255,255,255,.82); border-radius: 15px; background: rgba(255,255,255,.52); color: var(--ink); box-shadow: 0 7px 16px rgba(40,66,119,.06), inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; padding: 12px; font-size: 15px; font-weight: 620; }
+      .chip { min-height: 74px; border: 1px solid rgba(255,255,255,.82); border-radius: 18px; background: rgba(255,255,255,.52); color: var(--ink); box-shadow: 0 7px 16px rgba(40,66,119,.06), inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: left; padding: 12px; font-size: 15px; font-weight: 620; }
+      .choice-grid .chip:nth-child(4n + 1) { background:linear-gradient(135deg,rgba(255,222,184,.74),rgba(255,247,232,.48)); }
+      .choice-grid .chip:nth-child(4n + 2) { background:linear-gradient(135deg,rgba(202,231,255,.76),rgba(241,249,255,.48)); }
+      .choice-grid .chip:nth-child(4n + 3) { background:linear-gradient(135deg,rgba(221,215,255,.74),rgba(248,246,255,.48)); }
+      .choice-grid .chip:nth-child(4n + 4) { background:linear-gradient(135deg,rgba(202,244,224,.75),rgba(243,253,247,.48)); }
       .chip[aria-pressed="true"] { border-color: rgba(0,84,253,.42); background: rgba(234,240,255,.68); color: var(--cian-strong); animation: choiceSet 300ms cubic-bezier(.2,.9,.2,1); }
       .soft-note { margin-top: 18px; padding: 14px; border: 1px solid rgba(255,255,255,.78); border-radius: 15px; color: #4e5f8c; background: rgba(243,246,255,.54); box-shadow: inset 0 1px 0 rgba(255,255,255,.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); font-size: 14px; line-height: 1.4; }
       .result-card { margin-top: 22px; padding: 17px; border: 1px solid rgba(255,255,255,.88); border-radius: 20px; background: linear-gradient(145deg, rgba(255,255,255,.70), rgba(223,233,255,.55)); box-shadow: 0 12px 26px rgba(0,84,253,.12), inset 0 1px 0 rgba(255,255,255,.8); backdrop-filter: blur(18px) saturate(130%); -webkit-backdrop-filter: blur(18px) saturate(130%); color: #264c9d; animation: resultIn 520ms cubic-bezier(.2,1.05,.2,1); }
@@ -166,14 +183,179 @@
       .call-summary { margin-top: 24px; padding: 16px; border: 1px solid rgba(255,255,255,.82); border-radius: 18px; background: rgba(243,246,255,.58); box-shadow: 0 8px 20px rgba(40,66,119,.08), inset 0 1px 0 rgba(255,255,255,.78); backdrop-filter: blur(17px); -webkit-backdrop-filter: blur(17px); color: #34528f; text-align: left; }
       .call-summary small { color: var(--muted); }
       .call-summary b { display: block; margin-top: 5px; color: var(--ink); }
+      .finance-island { margin-top:14px; animation:resultIn 260ms cubic-bezier(.2,.9,.2,1); }
+      /* Solid bento mode: intentional blocks, no frosted or transparent surfaces. */
+      body { color:#f8f8f6; background:#f17c56; }
+      .stage { background:radial-gradient(circle at 88% 11%,#ffd24f 0 6rem,transparent 6.2rem),radial-gradient(circle at 8% 86%,#0054fd 0 9rem,transparent 9.2rem),#f17c56; }
+      .stage::before, .stage::after { display:none; }
+      .device { border:8px solid #151617; border-radius:38px; background:#151617; box-shadow:0 26px 56px rgba(46,25,20,.36); backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .topbar { background:#151617; border:0; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .wordmark { color:#fff; }
+      .source-pill { color:#151617; background:#f8f8f6; border:0; box-shadow:none; }
+      .progress-label { color:#b7b8bd; }
+      .progress { border:0; background:#303238; }
+      .progress > span { background:#0054fd; }
+      .footer { background:#151617; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      main { padding-top:20px; }
+      .screen { color:#fff; }
+      .eyebrow { color:#76a2ff; }
+      h1, h2 { color:#fff; }
+      .lead, .mini-benefit { color:#b9bbc1; }
+      .quest-panel { border:0; border-radius:19px; background:#0054fd; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .quest-panel span, .quest-panel b { color:#fff; }
+      .quest-track i { background:rgba(255,255,255,.34); }
+      .quest-track i.is-done { background:#ffd54a; box-shadow:none; }
+      .estimate { border:0; background:#ff835d; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .estimate small, .estimate p { color:#522115; }
+      .estimate b { color:#151617; }
+      .dot { background:#ffd54a; box-shadow:none; }
+      .form { gap:10px; }
+      .field { border:0; border-radius:20px; background:#f7f7f3; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .field label { color:#151617; }
+      .field input { border:0; border-radius:12px; background:#e9e9e4; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; color:#151617; }
+      .field input:focus { border:0; background:#fff; box-shadow:0 0 0 3px #0054fd; }
+      .field input[readonly] { background:#dbdcd8; color:#5b5d60; }
+      .hint { color:#606166; }
+      .choices { gap:10px; }
+      .choice { min-height:72px; border:0; border-radius:21px; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .choice:hover { transform:translateY(-2px) rotate(-.25deg); box-shadow:none; }
+      .choices .choice:nth-child(4n + 1) { background:#ffd75a; }
+      .choices .choice:nth-child(4n + 2) { background:#b7e7e6; }
+      .choices .choice:nth-child(4n + 3) { background:#ffb2a0; }
+      .choices .choice:nth-child(4n + 4) { background:#c9b9ff; }
+      .choices .choice[aria-pressed="true"] { border:3px solid #0054fd; background:#f8f8f6; box-shadow:none; }
+      .choice > span > strong, .choice > span > span { color:#151617; }
+      .check { border-color:rgba(21,22,23,.24); background:rgba(255,255,255,.3); }
+      .choice[aria-pressed="true"] .check { background:#0054fd; }
+      .soft-note { border:0; border-radius:20px; color:#f6f6f2; background:#24262a; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      /* The income picker behaves like a four-key amount pad, rather than a set of form controls. */
+      .salary-selector { display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:124px 124px; gap:10px; margin-top:22px; }
+      .salary-card { min-width:0; display:grid; grid-template-columns:auto 1fr; grid-template-rows:auto 1fr auto; column-gap:8px; text-align:left; padding:14px; border:0; border-radius:25px; color:#151617; background:#f7f7f3; overflow:hidden; position:relative; transition:transform 220ms cubic-bezier(.2,.9,.2,1), outline-color 180ms, filter 180ms; }
+      .salary-card:nth-child(1) { grid-column:span 2; background:#ffd75a; }
+      .salary-card:nth-child(2) { background:#b7e7e6; }
+      .salary-card:nth-child(3) { background:#c9b9ff; }
+      .salary-card:nth-child(4) { grid-column:span 2; background:#ffb2a0; }
+      .salary-card::after { content:""; position:absolute; right:-20px; bottom:-24px; width:88px; height:88px; border:13px solid rgba(21,22,23,.12); border-radius:50%; }
+      .salary-card small { grid-column:1/-1; color:#4a4b4c; font-size:12px; font-weight:750; z-index:1; }
+      .salary-card b { grid-column:1/-1; align-self:end; font-size:clamp(19px,5.6vw,28px); line-height:.9; letter-spacing:-1.5px; z-index:1; }
+      .salary-card span { grid-column:1/-1; align-self:end; color:#4b4b4d; font-size:13px; font-weight:650; z-index:1; }
+      .salary-card:nth-child(1) b { font-size:54px; }
+      .salary-card:nth-child(1)::before { content:"₽"; position:absolute; right:17px; top:44%; font-size:26px; font-weight:800; opacity:.42; }
+      .salary-card[aria-pressed="true"] { outline:4px solid #0054fd; outline-offset:-4px; transform:translateY(-4px) scale(1.01); filter:saturate(1.15); }
+      .salary-card[aria-pressed="true"]::after { border-color:#0054fd; }
+      .finance-island { border:0; background:#f7f7f3; }
+      .result-card { border:0; border-radius:22px; color:#151617; background:#b7e7e6; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .result-card b { color:#151617; }
+      /* Three calendar tickets make the call date feel like choosing a route, not filling a field. */
+      .date-deck { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-top:22px; }
+      .date-card { min-height:136px; display:grid; grid-template-rows:auto 1fr auto; align-items:start; position:relative; padding:13px 10px; border:0; border-radius:23px; color:#151617; background:#f7f7f3; text-align:left; overflow:hidden; transition:transform 220ms cubic-bezier(.2,.9,.2,1),outline-color 180ms; }
+      .date-card:nth-child(1) { background:#ffd75a; transform:rotate(-1.5deg); }
+      .date-card:nth-child(2) { background:#b7e7e6; transform:translateY(7px); }
+      .date-card:nth-child(3) { background:#c9b9ff; transform:rotate(1.5deg); }
+      .date-card::before { content:""; position:absolute; left:10px; right:10px; top:42px; border-top:2px dashed rgba(21,22,23,.18); }
+      .date-card::after { content:""; position:absolute; left:-5px; right:-5px; bottom:31px; border-top:2px dashed rgba(21,22,23,.17); }
+      .date-card small { font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.3px; }
+      .date-card b { align-self:center; padding-top:7px; font-size:43px; line-height:1; letter-spacing:-2.5px; }
+      .date-card span { padding-bottom:2px; font-size:12px; font-weight:750; text-transform:capitalize; }
+      .date-card i { position:absolute; right:10px; top:11px; width:21px; height:21px; display:grid; place-items:center; border-radius:50%; font-style:normal; font-size:10px; background:rgba(255,255,255,.55); }
+      .date-card[aria-pressed="true"] { outline:4px solid #0054fd; outline-offset:-4px; transform:translateY(-5px) rotate(0); }
+      .time-console { margin-top:18px; padding:16px; border-radius:25px; background:#f7f7f3; color:#151617; }
+      .time-console-title { display:flex; flex-direction:column; gap:2px; }
+      .time-console-title span { color:#6c6e71; font-size:12px; font-weight:650; }
+      .time-console-title b { font-size:17px; letter-spacing:-.3px; }
+      .time-orbit { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:13px; }
+      .time-slot { min-height:72px; display:grid; gap:6px; place-items:center; border:0; border-radius:18px; color:#151617; background:#e5e5e0; transition:transform 180ms cubic-bezier(.2,.9,.2,1),outline-color 180ms; }
+      .time-slot:nth-child(1) { background:#ffb2a0; }
+      .time-slot:nth-child(2) { background:#ffd75a; }
+      .time-slot:nth-child(3) { background:#b7e7e6; }
+      .time-slot i { font-size:19px; font-style:normal; }
+      .time-slot span { font-size:12px; font-weight:750; }
+      .time-slot[aria-pressed="true"] { outline:4px solid #0054fd; outline-offset:-4px; transform:translateY(-3px); }
+      .consent { border:0; border-radius:20px; color:#c5c6ca; background:#24262a; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .consent a { color:#86aaff; }
+      .primary { background:#0054fd; box-shadow:none; }
+      .primary:hover { background:#2e71ff; }
+      .back, .legal { color:#b9bbc1; }
+      .success-mark { background:#ffd75a; color:#151617; box-shadow:none; }
+      .success p { color:#c5c6ca; }
+      .call-summary { border:0; background:#b7e7e6; color:#151617; box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+      .call-summary b, .call-summary small { color:#151617; }
+      /* Quiet mode: a restrained, editorial base with Cian blue reserved for actions and selection. */
+      body { color:#16181d; background:#eceef2; }
+      .stage { background:#eceef2; }
+      .device { border:1px solid #d9dde5; border-radius:34px; background:#f5f6f8; box-shadow:0 20px 48px rgba(26,34,49,.12); }
+      .topbar, .footer { background:#f5f6f8; }
+      .wordmark { color:#0054fd; }
+      .source-pill { color:#535963; background:#fff; border:1px solid #e4e7ed; }
+      .progress-label, .back, .legal { color:#6e7480; }
+      .progress { background:#e1e5ec; }
+      .screen, h1, h2 { color:#16181d; }
+      .eyebrow { color:#0054fd; }
+      .lead, .mini-benefit { color:#69707c; }
+      .quest-panel { color:#16181d; background:#fff; border:1px solid #e4e7ed; }
+      .quest-panel span { color:#717784; }
+      .quest-panel b { color:#20242c; }
+      .quest-track i { background:#dde1e8; }
+      .quest-track i.is-done { background:#0054fd; }
+      .estimate { background:#fff; border:1px solid #e4e7ed; }
+      .estimate small, .estimate p, .estimate b { color:#1f252e; }
+      .estimate b { font-size:30px; }
+      .start-caption { margin:18px 2px 0; color:#7a818c; font-size:14px; line-height:1.45; }
+      .dot { background:#0054fd; }
+      .field { background:#fff; border:1px solid #e4e7ed; }
+      .field label { color:#20242c; }
+      .field input, .field input[readonly] { background:#f0f2f5; color:#20242c; }
+      .soft-note, .consent { color:#5d6470; background:#fff; border:1px solid #e4e7ed; }
+      .result-card, .call-summary { background:#eef3ff; border:1px solid #dbe5ff; }
+      .result-card b, .call-summary b, .call-summary small { color:#20242c; }
+      .primary { background:#0054fd; }
+      .primary:hover { background:#0047d7; }
+      .success-mark { background:#e8efff; color:#0054fd; }
+      .success p { color:#69707c; }
+      .calm-options { display:grid; gap:9px; margin-top:24px; }
+      .calm-options button { min-height:64px; display:grid; gap:3px; padding:13px 15px; border:1px solid #e1e5ec; border-radius:17px; text-align:left; color:#1d232c; background:#fff; transition:border-color 160ms, transform 160ms, background 160ms; }
+      .calm-options button b { font-size:15px; }
+      .calm-options button span { color:#7a818c; font-size:13px; }
+      .calm-options button[aria-pressed="true"] { border:2px solid #0054fd; background:#f7f9ff; transform:translateY(-1px); }
+      .object-swipe { margin-top:25px; padding:18px 14px 15px; border:1px solid #e1e5ec; border-radius:23px; background:#fff; }
+      .swipe-labels { display:grid; grid-template-columns:repeat(3,1fr); margin-bottom:18px; color:#8b919a; font-size:11px; line-height:1.15; }
+      .swipe-labels span:nth-child(2) { text-align:center; }
+      .swipe-labels span:last-child { text-align:right; }
+      .swipe-track { height:48px; position:relative; touch-action:none; cursor:grab; outline:none; }
+      .swipe-track:active { cursor:grabbing; }
+      .swipe-track:focus-visible { border-radius:99px; box-shadow:0 0 0 3px rgba(0,84,253,.22); }
+      .swipe-line { position:absolute; top:21px; left:0; right:0; height:7px; border-radius:99px; background:linear-gradient(90deg,#dfe4ed 0 33.3%,#e9edf3 33.3% 66.6%,#dfe4ed 66.6%); }
+      .swipe-thumb { position:absolute; top:0; left:var(--swipe-position); width:48px; height:48px; display:grid; place-items:center; border:5px solid #fff; border-radius:50%; color:#fff; background:#0054fd; box-shadow:0 5px 13px rgba(0,84,253,.28); transform:translateX(-50%); transition:left 220ms cubic-bezier(.2,.85,.2,1); }
+      .swipe-track:active .swipe-thumb { transition:none; transform:translateX(-50%) scale(1.06); }
+      .swipe-result { margin-top:12px; color:#20242c; font-size:17px; font-weight:700; letter-spacing:-.25px; text-align:center; }
+      .consultant-choice { margin-top:12px; padding:15px; border-radius:18px; color:#20242c; background:#f0f4fc; }
+      .consultant-choice p { margin:0 0 5px; color:#737a86; font-size:12px; line-height:1.3; }
+      .consultant-choice b { font-size:15px; }
+      .consultant-choice > div { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+      .consultant-choice button { min-height:47px; padding:8px; border:1px solid #d8dee9; border-radius:13px; color:#303640; background:#fff; font-size:12px; font-weight:650; }
+      .consultant-choice button[aria-pressed="true"] { border:2px solid #0054fd; color:#0054fd; }
+      .salary-card:nth-child(n), .date-card:nth-child(n), .time-slot:nth-child(n) { background:#fff; color:#20242c; }
+      .salary-card, .date-card, .time-console { border:1px solid #e1e5ec; }
+      .salary-card::after { border-color:rgba(0,84,253,.10); }
+      .salary-card small, .salary-card span { color:#6f7681; }
+      .salary-card[aria-pressed="true"], .date-card[aria-pressed="true"], .time-slot[aria-pressed="true"] { background:#f7f9ff; outline-color:#0054fd; }
+      .date-card:nth-child(1), .date-card:nth-child(2), .date-card:nth-child(3) { transform:none; }
+      .date-card::before, .date-card::after { border-color:#e0e4eb; }
+      .date-card i { color:#0054fd; background:#eaf0ff; }
+      .time-console { background:#fff; }
+      .time-console-title span { color:#7a818c; }
+      .time-slot { border:1px solid #e1e5ec; }
       @media (max-width: 480px) {
         .stage { padding: 0; }
         .device { width: 100%; min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; }
+        .form { grid-template-columns:1fr; }
+        .form .field:first-child { grid-column:auto; }
       }
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
       }
     </style>
+    <link rel="stylesheet" href="./experience.css" />
   </head>
   <body>
     <div class="stage">
@@ -181,8 +363,8 @@
         <header class="topbar">
           <div class="brand-row"><div class="wordmark">Циан</div><div class="source-pill">Ипотечный калькулятор</div></div>
           <div class="progress-wrap" id="progressWrap">
-            <div class="progress-label"><span id="stepLabel">Короткая заявка</span><span id="stepCount">1 из 7</span></div>
-            <div class="progress" role="progressbar" aria-label="Прогресс анкеты" aria-valuemin="1" aria-valuemax="7" aria-valuenow="1"><span id="progressBar"></span></div>
+            <div class="progress-label"><span id="stepLabel">Короткая заявка</span><span id="stepCount">1 из 5</span></div>
+            <div class="progress" role="progressbar" aria-label="Прогресс анкеты" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1"><span id="progressBar"></span></div>
           </div>
         </header>
         <main>
@@ -199,22 +381,31 @@
         day: '', slot: '', marketing: false, showErrors: false, transition: 'forward', submitting: false,
         viewedSteps: new Set(), resultTracked: false
       };
-      const totalSteps = 7;
+      const totalSteps = 5;
       // TODO: заменить на реальный номер счётчика перед подключением Яндекс Метрики.
       const METRIKA_COUNTER_ID = 00000000;
-      const stepNames = ['entry', 'contacts', 'timing', 'object', 'consultant', 'finance', 'call_time', 'success'];
+      const stepNames = ['entry', 'timing', 'object', 'finance', 'call_time', 'contacts', 'success'];
       const content = document.getElementById('content');
       const footer = document.getElementById('footer');
       const progressBar = document.getElementById('progressBar');
       const stepCount = document.getElementById('stepCount');
       const stepLabel = document.getElementById('stepLabel');
       const progressWrap = document.getElementById('progressWrap');
-      const days = [
-        { label: 'Сегодня', date: '23 ноября' },
-        { label: 'Завтра', date: '24 ноября' },
-        { label: 'Вт', date: '25 ноября' }
-      ];
+      const todayParts = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone:'Europe/Berlin', year:'numeric', month:'numeric', day:'numeric' }).formatToParts(new Date()).map(part => [part.type, part.value]));
+      const days = Array.from({length:3}, (_, index) => {
+        const date = new Date(Date.UTC(Number(todayParts.year), Number(todayParts.month) - 1, Number(todayParts.day) + index, 12));
+        return { label:index === 0 ? 'Сегодня' : index === 1 ? 'Завтра' : new Intl.DateTimeFormat('ru-RU', {weekday:'long',timeZone:'UTC'}).format(date), date:new Intl.DateTimeFormat('ru-RU', {day:'numeric',month:'long',timeZone:'UTC'}).format(date) };
+      });
       const slots = ['10:00–12:00', '12:00–15:00', '18:00–21:00'];
+      const timingOptions = [
+        { value: 'month', label: 'В течение месяца', short: 'До месяца', title: 'Скоро — значит, по делу', note: 'Эксперт поможет разобраться с ближайшими шагами.' },
+        { value: 'quarter', label: 'Через 1–3 месяца', short: '1–3 месяца', title: 'Есть время всё взвесить', note: 'Разберём варианты и спокойно подготовимся к покупке.' },
+        { value: 'half', label: 'Через 3–6 месяцев', short: '3–6 месяцев', title: 'Начнём с хорошего плана', note: 'Поймём, что можно подготовить заранее.' },
+        { value: 'explore', label: 'Пока изучаю', short: 'Пока изучаю', title: 'Любопытство — уже начало', note: 'Поможем понять возможности. Без обязательств.' }
+      ];
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let welcomeFrame = 0;
+      let entryLeaving = false;
 
       function reachGoal(name, params = {}) {
         const payload = { step: stepNames[state.step], step_number: state.step, ...params };
@@ -239,118 +430,427 @@
         return `<button class="chip" type="button" data-chip="${value}" aria-pressed="${selected}">${label}</button>`;
       }
       function validate() {
-        if (state.step === 1) {
+        if (state.step === 5) {
           const nameOk = state.name.trim().split(/\s+/).filter(Boolean).length >= 2;
           const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
           return nameOk && emailOk;
         }
-        if (state.step === 2) return Boolean(state.timing);
-        if (state.step === 3) return Boolean(state.object);
-        if (state.step === 4) return Boolean(state.consultant);
-        if (state.step === 5) return Boolean(state.income) && Boolean(state.hasDebts) && (state.hasDebts === 'no' || Number(state.debtPayment.replace(/\s/g,'')) > 0);
-        if (state.step === 6) return Boolean(state.day && state.slot);
+        if (state.step === 1) return Boolean(state.timing);
+        if (state.step === 2) return Boolean(state.object) && (state.object === 'yes' || Boolean(state.consultant));
+        if (state.step === 3) return Boolean(state.income) && Boolean(state.hasDebts) && (state.hasDebts === 'no' || Number(state.debtPayment.replace(/\s/g,'')) > 0);
+        if (state.step === 4) return Boolean(state.day && state.slot);
         return true;
       }
       function updateProgress() {
-        if (state.step === 7) { progressWrap.style.visibility = 'hidden'; return; }
+        if (state.step === 0 || state.step === 6) { progressWrap.style.visibility = 'hidden'; return; }
         progressWrap.style.visibility = 'visible';
-        const shown = Math.max(1, state.step);
+        const shown = state.step;
         progressBar.style.width = `${(shown / totalSteps) * 100}%`;
         progressBar.parentElement.setAttribute('aria-valuenow', String(shown));
         stepCount.textContent = `${shown} из ${totalSteps}`;
         stepLabel.textContent = state.step === 0 ? 'Короткая заявка' : 'Анкета для эксперта';
       }
       function render() {
+        window.cancelAnimationFrame(welcomeFrame);
+        entryLeaving = false;
+        const device = document.querySelector('.device');
+        device.classList.toggle('is-entry', state.step === 0);
+        device.classList.add('is-opening');
+        device.classList.toggle('is-form', state.step > 0 && state.step < 6);
+        device.classList.toggle('is-success', state.step === 6);
+        document.querySelector('.source-pill').textContent = state.step === 0 ? 'Ипотека' : 'Короткая заявка';
         updateProgress();
         trackStepView();
         let html = '';
         let actions = '';
         if (state.step === 0) {
-          html = `<section class="screen"><p class="eyebrow">Ипотека в Циане</p><h1>Поможем сделать следующий шаг</h1><p class="lead">Ответьте на несколько вопросов — эксперт подберёт варианты под вашу ситуацию.</p><div class="estimate"><small>Вы рассчитали платёж</small><b>от 62 400 ₽ в месяц</b><p>Ориентир по вашим параметрам. Решение банка может отличаться.</p></div><div class="mini-benefits"><div class="mini-benefit"><i class="dot"></i>Займёт около 2 минут</div><div class="mini-benefit"><i class="dot"></i>Без паспорта и документов</div><div class="mini-benefit"><i class="dot"></i>Остальное уточнит брокер</div></div></section>`;
-          actions = `<button class="primary" id="next">Продолжить</button><p class="legal">Продолжая, вы соглашаетесь на обработку данных для заявки.</p>`;
+          html = `<section class="screen welcome-screen">
+            <p class="welcome-kicker"><span class="welcome-spark" aria-hidden="true">✳</span> Привет. Начнём с вашего будущего</p>
+            <h1 class="welcome-title"><span><em>Свой дом.</em></span><span><em>Свой ритм.</em></span></h1>
+            <p class="welcome-copy">От первого расчёта — к своей ипотеке.</p>
+            <div class="calculation-stack">
+              <button type="button" class="calculation-card" id="startCalculation" aria-label="Ваш расчёт: от 62 400 рублей в месяц. Продолжить подбор ипотеки">
+                <span class="calculation-top"><span>Ваш расчёт<span class="calculation-overline">Ежемесячный платёж от</span></span><span class="calculation-saved" aria-hidden="true">↗</span></span>
+                <span class="calculation-value" aria-hidden="true"><b id="paymentAmount">62 400</b><span class="rouble">₽</span></span>
+                <span class="calculation-period" aria-hidden="true">в месяц. И целый дом впереди.</span>
+                <span class="calculation-journey" aria-hidden="true">
+                  <svg viewBox="0 0 304 142" fill="none">
+                    <path class="journey-grid" d="M18 18V114M143 18V114M284 18V114M18 114H284" />
+                    <path class="journey-guide" d="M18 102C66 102 83 38 143 38S236 62 284 18" />
+                    <path id="calculationCurve" class="journey-curve" pathLength="1" d="M18 102C66 102 83 38 143 38S236 62 284 18" />
+                    <circle class="journey-station" cx="18" cy="102" r="3" /><circle class="journey-station" cx="143" cy="38" r="3" />
+                    <g class="journey-home"><circle cx="284" cy="18" r="17" /><path d="M276 18L284 11L292 18M278 17V25H290V17M282 25V20H286V25" /></g>
+                    <circle id="calculationMarker" class="journey-marker" cx="284" cy="18" r="6" />
+                    <text x="18" y="137">Расчёт</text><text x="143" y="137" text-anchor="middle">Подбор</text><text x="284" y="137" text-anchor="end">Ваш дом</text>
+                  </svg>
+                </span>
+                <span class="calculation-action"><span>Найдём вашу ипотеку</span><span class="calculation-arrow" aria-hidden="true">↗</span></span>
+              </button>
+            </div>
+            <p class="entry-detail"><span>5 коротких шагов</span><span>2 минуты</span><span>Без документов</span></p>
+            <p class="entry-reassurance">Предварительный расчёт. Условия и решение банка могут отличаться.</p>
+          </section>`;
+          actions = '';
         }
         if (state.step === 1) {
-          const nameErr = state.showErrors && state.name.trim().split(/\s+/).filter(Boolean).length < 2;
-          const emailErr = state.showErrors && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
-          html = `<section class="screen"><p class="eyebrow">Контакты</p><h2>Как к вам обращаться?</h2><p class="lead">Возьмём данные из профиля — вы сможете исправить почту.</p><div class="form"><div class="field"><label for="name">ФИО</label><input id="name" autocomplete="name" placeholder="Например, Илья Петров" value="${escapeHtml(state.name)}" /><div class="error">${nameErr ? 'Укажите хотя бы имя и фамилию' : ''}</div></div><div class="field"><label for="email">Почта</label><input id="email" type="email" autocomplete="email" value="${escapeHtml(state.email)}" /><div class="error">${emailErr ? 'Проверьте адрес почты' : ''}</div></div><div class="field"><label for="phone">Телефон</label><input id="phone" readonly value="${state.phone}" /><span class="hint">На него позвонит эксперт. Изменить номер можно в профиле.</span></div></div></section>`;
+          const selectedTiming = timingOptions.find(option => option.value === state.timing);
+          html = `<section class="screen timing-screen"><p class="eyebrow">01 / Ваш план</p><h2>Свой дом.<br><span>В своё время.</span></h2><p class="lead">Когда вы хотели бы купить квартиру?</p>
+            <div class="timing-panel" data-choice-group="timing"><div class="timing-panel-top"><span>Ваш горизонт покупки</span><b>Выберите касанием ↓</b></div><div class="timing-chart">${timingOptions.map((option, index) => `<button type="button" class="timing-option" data-choice="${option.value}" aria-label="${option.label}" aria-pressed="${state.timing === option.value}"><span class="timing-bar"><i aria-hidden="true">${state.timing === option.value ? '✓' : String(index + 1).padStart(2, '0')}</i></span><b>${option.short}</b></button>`).join('')}</div>
+              <div class="timing-response" id="timingResponse" role="status"><span class="response-icon" aria-hidden="true">↗</span><div><strong>${selectedTiming?.title || 'В каком ритме движемся?'}</strong><p>${selectedTiming?.note || 'Любой ответ подойдёт. Даже если вы только присматриваетесь.'}</p></div></div>
+            </div><p class="timing-caption">Можно вернуться и изменить ответ</p>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий срок покупки</div>' : ''}</section>`;
           actions = navActions('Продолжить');
         }
         if (state.step === 2) {
-          html = `<section class="screen"><p class="eyebrow">Планы</p><h2>Когда планируете покупку?</h2><p class="lead">Так эксперт поймёт, с чего начать разговор.</p><div class="choices">${choice('В течение месяца','month',state.timing==='month')}${choice('Через 1–3 месяца','quarter',state.timing==='quarter')}${choice('Через 3–6 месяцев','half',state.timing==='half')}${choice('Просто изучаю','explore',state.timing==='explore')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          const objectIndex = ['yes','choosing','budget'].indexOf(state.object);
+          html = `<section class="screen"><p class="eyebrow">02 / Ваша квартира</p><h2>Уже нашли?<br><span>Или ищем?</span></h2><p class="lead">Сдвиньте ползунок туда, где вы сейчас.</p><div class="object-swipe" data-object-swipe style="--swipe-position:${objectIndex < 0 ? 50 : objectIndex * 50}%"><div class="object-marker" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 15L16 5L28 15M7 13V27H25V13M13 27V18H19V27" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div><div class="swipe-labels"><span>Есть объект</span><span>Выбираю</span><span>Бюджет</span></div><div class="swipe-track" role="slider" tabindex="0" aria-label="Статус поиска квартиры" aria-valuemin="0" aria-valuemax="2" aria-valuenow="${objectIndex < 0 ? 1 : objectIndex}" aria-valuetext="${objectIndex < 0 ? 'Выберите свой этап' : ['Объект уже выбран','Пока выбираю квартиру','Хочу понять свой бюджет'][objectIndex]}"><div class="swipe-line"></div><div class="swipe-thumb"><span aria-hidden="true">↔</span></div></div><div class="swipe-result" id="objectSwipeLabel">${objectIndex < 0 ? 'На каком вы этапе?' : ['Объект уже выбран','Пока выбираю квартиру','Хочу понять свой бюджет'][objectIndex]}</div><span class="swipe-help">Проведите пальцем или коснитесь шкалы</span></div><div id="consultantHost"></div></section>`;
           actions = navActions('Продолжить');
         }
         if (state.step === 3) {
-          html = `<section class="screen"><p class="eyebrow">Объект</p><h2>Уже выбрали квартиру?</h2><p class="lead">Можно ответить сейчас — это ни к чему не обязывает.</p><div class="choices">${choice('Да, объект уже есть','yes',state.object==='yes','Учтём параметры квартиры')}${choice('Пока выбираю','choosing',state.object==='choosing','Подскажем, на что смотреть')}${choice('Хочу понять бюджет','budget',state.object==='budget','Оценим реалистичные варианты')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          html = `<section class="screen finance-screen"><p class="eyebrow">03 / Финансы</p><h2>Ваши цифры.<br><span>Без справок.</span></h2><p class="lead">Какой у вас доход в месяц? Примерно — достаточно.</p><div class="income-panel"><div class="panel-kicker">Доход в месяц <span aria-hidden="true">↗</span></div><div class="salary-selector" data-choice-group="income" aria-label="Выбор дохода"><button class="salary-card" type="button" data-chip="100" aria-label="До 100 тысяч рублей" aria-pressed="${state.income==='100'}"><small>до</small><b>100</b><span>тыс. ₽</span></button><button class="salary-card" type="button" data-chip="200" aria-label="От 100 до 200 тысяч рублей" aria-pressed="${state.income==='200'}"><small>от 100 до</small><b>200</b><span>тыс. ₽</span></button><button class="salary-card" type="button" data-chip="350" aria-label="От 200 до 350 тысяч рублей" aria-pressed="${state.income==='350'}"><small>от 200 до</small><b>350</b><span>тыс. ₽</span></button><button class="salary-card" type="button" data-chip="350plus" aria-label="Больше 350 тысяч рублей" aria-pressed="${state.income==='350plus'}"><small>больше</small><b>350</b><span>тыс. ₽</span></button></div><div class="income-levels" aria-hidden="true">${Array.from({length:16},(_,i)=>`<i style="--level:${i}"></i>`).join('')}</div><p class="income-hint" id="incomeHint" role="status">Выберите свой диапазон</p></div><div class="debt-panel"><h3>Уже есть кредиты?</h3><div class="choices" data-choice-group="debts">${choice('Есть','yes',state.hasDebts==='yes')}${choice('Нет','no',state.hasDebts==='no')}</div><div id="financeExtras"></div></div><div id="financeResult"></div></section>`;
           actions = navActions('Продолжить');
         }
         if (state.step === 4) {
-          html = `<section class="screen"><p class="eyebrow">Подбор квартиры</p><h2>Нужна помощь с поиском?</h2><p class="lead">Для семейной ипотеки и новостроек можем подключить консультанта.</p><div class="choices">${choice('Да, помогите подобрать','yes',state.consultant==='yes','Консультант учтёт условия семейной ипотеки')}${choice('Нет, объект найду сам','no',state.consultant==='no')}</div>${state.showErrors ? '<div class="error" role="alert">Выберите подходящий вариант</div>' : ''}</section>`;
+          html = `<section class="screen"><p class="eyebrow">04 / Короткий звонок</p><h2>Поговорим.<br><span>Когда удобно?</span></h2><p class="lead">Эксперт уточнит детали и подскажет следующий шаг.</p><div class="schedule-panel"><div class="panel-kicker">Ближайшие три дня <span aria-hidden="true">◷</span></div><div class="date-deck" data-choice-group="day">${days.map((day,i)=>`<button class="date-card" type="button" data-day="${i}" aria-label="${day.label}, ${day.date}" aria-pressed="${state.day===String(i)}"><small>${day.label}</small><b>${day.date.split(' ')[0]}</b><span>${day.date.split(' ')[1]}</span><i aria-hidden="true">${['01','02','03'][i]}</i></button>`).join('')}</div><div id="scheduleSlots"></div><p class="call-preview" id="callPreview" role="status">Сначала выберите день ↑</p></div><p class="timing-caption">Позвоним только в выбранное окно</p></section>`;
           actions = navActions('Продолжить');
         }
         if (state.step === 5) {
-          if (state.income && state.hasDebts && !state.resultTracked) { state.resultTracked = true; reachGoal('mortgage_short_form_pre_result_shown'); }
-          html = `<section class="screen"><p class="eyebrow">Финансы</p><h2>Какой у вас доход в месяц?</h2><p class="lead">Достаточно примерной суммы — без справок и документов.</p><div class="choice-grid">${chip('До 100 000 ₽','100',state.income==='100')}${chip('100–200 тыс. ₽','200',state.income==='200')}${chip('200–350 тыс. ₽','350',state.income==='350')}${chip('Больше 350 тыс. ₽','350plus',state.income==='350plus')}</div><div class="soft-note">Доход не влияет на решение автоматически — он нужен, чтобы разговор с экспертом был предметнее.</div><div class="choices" style="margin-top:16px">${choice('Есть кредиты','yes',state.hasDebts==='yes')}${choice('Кредитов нет','no',state.hasDebts==='no')}</div>${state.hasDebts==='yes' ? `<div class="field" style="margin-top:14px"><label for="debt">Ежемесячный платёж по кредитам</label><input id="debt" inputmode="numeric" placeholder="Например, 18 000" value="${escapeHtml(state.debtPayment)}" /><div class="error">${state.showErrors && Number(state.debtPayment.replace(/\s/g,'')) <= 0 ? 'Укажите ежемесячный платёж' : ''}</div></div>` : ''}${state.showErrors && (!state.income || !state.hasDebts) ? '<div class="error" role="alert">Выберите доход и укажите, есть ли кредиты</div>' : ''}${state.income && state.hasDebts ? `<div class="result-card"><b>Предварительный ориентир готов</b><p>Эксперт уже сможет обсудить подходящие программы и уточнить детали, влияющие на ставку.</p></div>` : ''}</section>`;
-          actions = navActions('Посмотреть ориентир');
-        }
-        if (state.step === 6) {
-          html = `<section class="screen"><p class="eyebrow">Звонок эксперта</p><h2>Когда вам удобно поговорить?</h2><p class="lead">Выберите время в ближайшие три дня. Эксперт позвонит на номер из профиля.</p><div class="schedule-days">${days.map((day,i)=>`<button class="day" type="button" data-day="${i}" aria-pressed="${state.day===String(i)}"><small>${day.label}</small><b>${day.date}</b></button>`).join('')}</div>${state.day !== '' ? `<div class="slots">${slots.map(slot=>`<button class="slot" type="button" data-slot="${slot}" aria-pressed="${state.slot===slot}">${slot}</button>`).join('')}</div>` : ''}${state.showErrors ? '<div class="error" role="alert">Выберите дату и время звонка</div>' : ''}<label class="consent"><input id="marketing" type="checkbox" ${state.marketing ? 'checked' : ''} /><span>Хочу получать полезные материалы об ипотеке и подборе жилья. Это необязательно.</span></label></section>`;
+          const nameErr = state.showErrors && state.name.trim().split(/\s+/).filter(Boolean).length < 2;
+          const emailErr = state.showErrors && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+          html = `<section class="screen"><p class="eyebrow">05 / Последний штрих</p><h2>Почти дома.<br><span>Как вас зовут?</span></h2><p class="lead">Оставьте контакты. Дальше поможет эксперт.</p><div class="contacts-panel"><div class="panel-kicker">Давайте познакомимся <span aria-hidden="true">✳</span></div><div class="form"><div class="field"><label for="name">Имя и фамилия</label><input id="name" autocomplete="name" placeholder="Например, Илья Петров" aria-describedby="nameError" value="${escapeHtml(state.name)}" /><div class="error" id="nameError">${nameErr ? 'Укажите имя и фамилию' : ''}</div></div><div class="field"><label for="email">Почта</label><input id="email" type="email" autocomplete="email" aria-describedby="emailError" value="${escapeHtml(state.email)}" /><div class="error" id="emailError">${emailErr ? 'Проверьте адрес почты' : ''}</div></div><div class="field phone-field"><label for="phone">Телефон из профиля <span aria-hidden="true">↗</span></label><input id="phone" readonly value="${state.phone}" /><span class="hint">Изменить номер можно в профиле.</span></div></div></div><div class="contact-appointment"><span class="appointment-icon" aria-hidden="true">◷</span><div><small>Ваше время звонка</small><b>${days[Number(state.day)].label}, ${state.slot}</b></div><span aria-hidden="true">✓</span></div><label class="consent"><input id="marketing" type="checkbox" ${state.marketing ? 'checked' : ''} /><span>Хочу получать полезные материалы об ипотеке и подборе жилья. Это необязательно.</span></label></section>`;
           actions = navActions('Отправить заявку', true);
         }
-        if (state.step === 7) {
+        if (state.step === 6) {
           const day = days[Number(state.day)];
-          html = `<section class="success screen"><div class="success-mark" aria-hidden="true">✓</div><p class="eyebrow">Заявка у эксперта</p><h1>Всё получилось</h1><p>Мы передали ответы ипотечному брокеру-партнёру. Он уточнит детали и поможет с дальнейшими шагами.</p><div class="call-summary"><small>Эксперт позвонит</small><b>${day.label}, ${day.date} · ${state.slot}</b></div></section>`;
+          html = `<section class="screen success-screen"><p class="eyebrow">Готово / Дальше вместе</p><h1>Вы сделали<br><span>первый шаг.</span></h1><div class="success-panel"><div class="success-orbit" aria-hidden="true"><i></i><i></i><i></i><svg viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="42" /><path d="M31 51L44 64L70 36" /></svg></div><p class="success-panel-title">Заявка у эксперта</p><div class="call-summary"><small>Позвоним в выбранное время</small><b>${day.label}, ${day.date}</b><strong>${state.slot}</strong><span>На ${state.phone}</span></div></div><p class="success-copy">Мы передали ответы ипотечному брокеру-партнёру. Он уточнит детали и поможет двигаться дальше.</p></section>`;
           actions = `<button class="primary" id="restart">Вернуться к расчёту</button><p class="legal">Вы всегда можете изменить данные в профиле Циана.</p>`;
         }
         content.innerHTML = html;
         const screen = content.querySelector('.screen');
         if (screen) screen.classList.add(`enter-${state.transition}`);
         footer.innerHTML = `<div class="actions">${actions}</div>`;
+        footer.hidden = state.step === 0;
         bind();
+        animateWelcome();
+        renderFinanceDetails();
+        updateIncomeVisual();
+        renderScheduleSlots();
+        updateCallPreview();
+        renderConsultantChoice();
+        updateQuestPanel();
+        window.scrollTo(0, 0);
       }
       function navActions(label, final = false) {
         const actionLabel = final && state.submitting ? 'Передаём заявку…' : label;
-        return `${state.step > 0 ? '<button class="back" id="back">← Назад</button>' : ''}<button class="primary" id="next" ${state.submitting ? 'disabled aria-busy="true"' : ''}>${actionLabel}</button>${final ? '<p class="legal">Нажимая «Отправить заявку», вы принимаете <a href="#" onclick="return false">условия сервиса</a> и <a href="#" onclick="return false">политику обработки данных</a>.</p>' : ''}`;
+        return `${state.step > 0 ? '<button class="back" id="back" aria-label="Назад">← Назад</button>' : ''}<button class="primary" id="next" ${state.submitting ? 'disabled aria-busy="true"' : ''}>${actionLabel}</button>${final ? '<p class="legal">Нажимая «Отправить заявку», вы принимаете <a href="#" onclick="return false">условия сервиса</a> и <a href="#" onclick="return false">политику обработки данных</a>.</p>' : ''}`;
+      }
+      function clearStepError() {
+        state.showErrors = false;
+        content.querySelector('[role="alert"]')?.remove();
+      }
+      function setPressed(group, value) {
+        content.querySelectorAll(`[data-choice-group="${group}"] [data-choice], [data-choice-group="${group}"] [data-chip], [data-choice-group="${group}"] [data-day], [data-choice-group="${group}"] [data-slot]`).forEach(button => {
+          const candidate = button.dataset.choice ?? button.dataset.chip ?? button.dataset.day ?? button.dataset.slot;
+          button.setAttribute('aria-pressed', String(candidate === value));
+        });
+      }
+      function updateQuestPanel() {
+        progressBar.parentElement.setAttribute('aria-valuetext', `Шаг ${state.step} из ${totalSteps}. Ответов готово: ${getCompleteSteps()} из ${totalSteps}`);
+      }
+      function getCompleteSteps() {
+        const contactsReady = state.name.trim().split(/\s+/).filter(Boolean).length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+        const financeReady = state.income && state.hasDebts && (state.hasDebts === 'no' || Number(state.debtPayment.replace(/\s/g,'')) > 0);
+        return [state.timing, state.object && (state.object === 'yes' || state.consultant), financeReady, state.day && state.slot, contactsReady].filter(Boolean).length;
+      }
+      function renderConsultantChoice() {
+        const host = document.getElementById('consultantHost');
+        if (!host) return;
+        if (!state.object || state.object === 'yes') { host.innerHTML = ''; return; }
+        host.innerHTML = `<div class="consultant-choice"><p>Для семейной ипотеки и новостроек</p><b>Подключим эксперта по подбору?</b><div><button type="button" data-consultant="yes" aria-pressed="${state.consultant==='yes'}">Да, помогите</button><button type="button" data-consultant="no" aria-pressed="${state.consultant==='no'}">Нет, спасибо</button></div></div>`;
+        host.querySelectorAll('[data-consultant]').forEach(button => button.addEventListener('click', () => {
+          state.consultant = button.dataset.consultant;
+          host.querySelectorAll('[data-consultant]').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+          clearStepError();
+          updateQuestPanel();
+          reachGoal('mortgage_short_form_option_selected', { field: 'consultant', value: state.consultant });
+        }));
+      }
+      function renderFinanceDetails() {
+        const extras = document.getElementById('financeExtras');
+        const result = document.getElementById('financeResult');
+        if (!extras || !result) return;
+        if (state.hasDebts === 'yes' && !document.getElementById('debt')) {
+          extras.innerHTML = `<div class="field finance-island"><label for="debt">Сколько платите в месяц, ₽</label><input id="debt" inputmode="numeric" placeholder="Например, 18 000" aria-describedby="debtError" value="${escapeHtml(state.debtPayment)}" /><div class="error" id="debtError"></div></div>`;
+          document.getElementById('debt').addEventListener('input', event => {
+            state.debtPayment = event.target.value.replace(/[^0-9 ]/g, '');
+            event.target.value = state.debtPayment;
+            document.getElementById('debtError').textContent = '';
+            event.target.removeAttribute('aria-invalid');
+            if (Number(state.debtPayment.replace(/\s/g,'')) > 0) clearStepError();
+            updateFinanceResult();
+            updateQuestPanel();
+          });
+        } else if (state.hasDebts !== 'yes') extras.innerHTML = '';
+        updateFinanceResult();
+      }
+      function updateFinanceResult() {
+        const result = document.getElementById('financeResult');
+        if (!result) return;
+        const ready = state.income && state.hasDebts && (state.hasDebts === 'no' || Number(state.debtPayment.replace(/\s/g,'')) > 0);
+        if (!ready) { result.innerHTML = ''; return; }
+        if (!state.resultTracked) { state.resultTracked = true; reachGoal('mortgage_short_form_pre_result_shown'); }
+        if (!result.firstElementChild) result.innerHTML = `<div class="result-card"><span aria-hidden="true">↗</span><div><b>Есть с чего начать</b><p>Эксперт сопоставит ваши доходы и расходы и обсудит подходящие варианты.</p></div></div>`;
+      }
+      function updateIncomeVisual() {
+        const hint = document.getElementById('incomeHint');
+        if (!hint) return;
+        const index = ['100','200','350','350plus'].indexOf(state.income);
+        content.querySelectorAll('.income-levels i').forEach((bar, i) => bar.classList.toggle('is-active', i < (index + 1) * 4));
+        hint.textContent = index < 0 ? 'Выберите свой диапазон' : ['До 100 000 ₽ в месяц','100 000–200 000 ₽ в месяц','200 000–350 000 ₽ в месяц','Больше 350 000 ₽ в месяц'][index];
+      }
+      function updateCallPreview() {
+        const preview = document.getElementById('callPreview');
+        if (!preview) return;
+        preview.textContent = state.slot ? `${days[Number(state.day)].label}, ${state.slot} · договорились ✓` : state.day ? 'Теперь выберите удобное время' : 'Сначала выберите день ↑';
+      }
+      function renderScheduleSlots() {
+        const slotsHost = document.getElementById('scheduleSlots');
+        if (!slotsHost) return;
+        slotsHost.innerHTML = state.day !== '' ? `<div class="time-console" data-choice-group="slot"><div class="time-console-title"><span>Выберите удобное окно</span></div><div class="time-orbit">${slots.map((slot, index)=>`<button class="time-slot" type="button" data-slot="${slot}" aria-label="${['Утром','Днём','Вечером'][index]}, ${slot}" aria-pressed="${state.slot===slot}"><i aria-hidden="true">${['☀','◐','☾'][index]}</i><small>${['Утром','Днём','Вечером'][index]}</small><span>${slot}</span></button>`).join('')}</div></div>` : '';
+        slotsHost.querySelectorAll('[data-slot]').forEach(button => button.addEventListener('click', () => {
+          state.slot = button.dataset.slot;
+          setPressed('slot', state.slot);
+          clearStepError();
+          updateQuestPanel();
+          updateCallPreview();
+          reachGoal('mortgage_short_form_call_slot_selected', { slot: state.slot });
+        }));
       }
       function showFieldErrors() {
-        if (state.step === 1) { state.name = state.name.trim(); state.email = state.email.trim(); }
+        if (state.step === 5) { state.name = state.name.trim(); state.email = state.email.trim(); }
         state.showErrors = true;
-        render();
+        if (state.step <= 4) {
+          let error = content.querySelector('[role="alert"]');
+          if (!error) {
+            error = document.createElement('div');
+            error.className = 'error';
+            error.setAttribute('role', 'alert');
+            content.querySelector('.screen').append(error);
+          }
+          const messages = {1:'Выберите подходящий срок покупки',2:'Выберите этап поиска и ответьте на вопрос о подборе',3:'Выберите доход и укажите, есть ли кредиты',4:'Выберите день и время звонка'};
+          const debtMissing = state.step === 3 && state.hasDebts === 'yes' && Number(state.debtPayment.replace(/\s/g,'')) <= 0;
+          error.textContent = debtMissing ? 'Укажите ежемесячный платёж по кредитам' : messages[state.step];
+          if (debtMissing) {
+            document.getElementById('debtError').textContent = 'Введите сумму больше нуля';
+            document.getElementById('debt').setAttribute('aria-invalid','true');
+            document.getElementById('debt').focus({preventScroll:true});
+          }
+          return;
+        }
+        const nameInvalid = state.name.trim().split(/\s+/).filter(Boolean).length < 2;
+        const emailInvalid = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.email);
+        document.getElementById('nameError').textContent = nameInvalid ? 'Укажите имя и фамилию' : '';
+        document.getElementById('emailError').textContent = emailInvalid ? 'Проверьте адрес почты' : '';
+        document.getElementById('name').setAttribute('aria-invalid', String(nameInvalid));
+        document.getElementById('email').setAttribute('aria-invalid', String(emailInvalid));
+        document.getElementById(nameInvalid ? 'name' : 'email').focus({preventScroll:true});
+      }
+      function animateWelcome() {
+        const amount = document.getElementById('paymentAmount');
+        if (!amount || reducedMotion.matches) return;
+        const curve = document.getElementById('calculationCurve');
+        const marker = document.getElementById('calculationMarker');
+        const curveLength = curve?.getTotalLength() || 0;
+        const formatter = new Intl.NumberFormat('ru-RU');
+        const startedAt = performance.now();
+        amount.textContent = '0';
+        if (curve) curve.style.strokeDashoffset = '1';
+        const tick = now => {
+          if (!amount.isConnected) return;
+          const progress = Math.min(1, Math.max(0, (now - startedAt - 580) / 1450));
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const value = Math.round((62400 * eased) / 100) * 100;
+          amount.textContent = formatter.format(value);
+          if (curve && marker) {
+            curve.style.strokeDashoffset = String(1 - eased);
+            const point = curve.getPointAtLength(curveLength * eased);
+            marker.setAttribute('cx', String(point.x));
+            marker.setAttribute('cy', String(point.y));
+            marker.style.opacity = String(progress > 0 ? Math.min(1, (1 - progress) * 8) : 0);
+          }
+          if (progress < 1) welcomeFrame = window.requestAnimationFrame(tick);
+        };
+        welcomeFrame = window.requestAnimationFrame(tick);
+      }
+      function bindWelcome() {
+        const card = document.getElementById('startCalculation');
+        if (!card) return;
+        if (!reducedMotion.matches && window.matchMedia('(pointer: fine)').matches) {
+          card.addEventListener('pointermove', event => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--tilt-x', `${(0.5 - (event.clientY - rect.top) / rect.height) * 4}deg`);
+            card.style.setProperty('--tilt-y', `${((event.clientX - rect.left) / rect.width - 0.5) * 4}deg`);
+          });
+          card.addEventListener('pointerleave', () => {
+            card.style.setProperty('--tilt-x', '0deg');
+            card.style.setProperty('--tilt-y', '0deg');
+          });
+        }
+        card.addEventListener('click', () => {
+          if (entryLeaving) return;
+          entryLeaving = true;
+          reachGoal('mortgage_short_form_start', { source: 'calculation_card' });
+          card.setAttribute('aria-busy', 'true');
+          content.querySelector('.welcome-screen').classList.add('is-leaving');
+          const continueToForm = () => {
+            state.step = 1;
+            state.showErrors = false;
+            state.transition = 'forward';
+            render();
+          };
+          if (reducedMotion.matches) continueToForm();
+          else window.setTimeout(continueToForm, 260);
+        });
+      }
+      function updateTimingResponse() {
+        const host = document.getElementById('timingResponse');
+        const option = timingOptions.find(item => item.value === state.timing);
+        if (!host || !option) return;
+        host.querySelector('strong').textContent = option.title;
+        host.querySelector('p').textContent = option.note;
+        host.classList.remove('is-updated');
+        window.requestAnimationFrame(() => { if (host.isConnected) host.classList.add('is-updated'); });
+        content.querySelectorAll('.timing-option').forEach((button, index) => {
+          button.querySelector('i').textContent = button.dataset.choice === state.timing ? '✓' : String(index + 1).padStart(2, '0');
+        });
+      }
+      function setObjectFromPointer(clientX, track, snap = true) {
+        const rect = track.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+        const values = ['yes', 'choosing', 'budget'];
+        const index = Math.round(ratio * 2);
+        const changed = state.object !== values[index];
+        state.object = values[index];
+        if (state.object === 'yes') state.consultant = '';
+        const wrap = track.closest('[data-object-swipe]');
+        wrap?.style.setProperty('--swipe-position', `${snap ? index * 50 : ratio * 100}%`);
+        track.setAttribute('aria-valuenow', String(index));
+        track.setAttribute('aria-valuetext', ['Объект уже выбран', 'Пока выбираю квартиру', 'Хочу понять свой бюджет'][index]);
+        const label = document.getElementById('objectSwipeLabel');
+        if (label) label.textContent = ['Объект уже выбран', 'Пока выбираю квартиру', 'Хочу понять свой бюджет'][index];
+        clearStepError();
+        updateQuestPanel();
+        if (changed) {
+          renderConsultantChoice();
+          const marker = content.querySelector('.object-marker');
+          marker?.classList.remove('is-updated');
+          window.requestAnimationFrame(() => { if (marker?.isConnected) marker.classList.add('is-updated'); });
+        }
+      }
+      function bindObjectSwipe() {
+        const track = document.querySelector('.swipe-track');
+        if (!track) return;
+        let dragging = false;
+        const move = event => { if (dragging) setObjectFromPointer(event.clientX, track, false); };
+        track.addEventListener('pointerdown', event => {
+          dragging = true;
+          track.classList.add('is-dragging');
+          track.setPointerCapture?.(event.pointerId);
+          setObjectFromPointer(event.clientX, track, false);
+        });
+        track.addEventListener('pointermove', move);
+        track.addEventListener('pointerup', event => {
+          if (!dragging) return;
+          dragging = false;
+          track.classList.remove('is-dragging');
+          setObjectFromPointer(event.clientX, track);
+          reachGoal('mortgage_short_form_option_selected', { field: 'object', value: state.object, interaction: 'drag' });
+        });
+        track.addEventListener('pointercancel', () => {
+          dragging = false;
+          track.classList.remove('is-dragging');
+          const index = Math.max(0, ['yes', 'choosing', 'budget'].indexOf(state.object));
+          track.closest('[data-object-swipe]').style.setProperty('--swipe-position', `${index * 50}%`);
+        });
+        track.addEventListener('keydown', event => {
+          if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+          event.preventDefault();
+          const values = ['yes', 'choosing', 'budget'];
+          const current = Math.max(0, values.indexOf(state.object));
+          const target = Math.max(0, Math.min(2, current + (event.key === 'ArrowRight' ? 1 : -1)));
+          const rect = track.getBoundingClientRect();
+          setObjectFromPointer(rect.left + (rect.width * target / 2), track);
+          reachGoal('mortgage_short_form_option_selected', { field: 'object', value: state.object, interaction: 'keyboard' });
+        });
       }
       function bind() {
+        bindWelcome();
         const name = document.getElementById('name');
         const email = document.getElementById('email');
-        const debt = document.getElementById('debt');
-        if (name) name.addEventListener('input', e => state.name = e.target.value);
-        if (email) email.addEventListener('input', e => state.email = e.target.value);
-        if (debt) debt.addEventListener('input', e => state.debtPayment = e.target.value.replace(/[^0-9 ]/g, ''));
+        if (name) name.addEventListener('input', e => {
+          state.name = e.target.value;
+          document.getElementById('nameError').textContent = '';
+          name.removeAttribute('aria-invalid');
+          updateQuestPanel();
+        });
+        if (email) email.addEventListener('input', e => {
+          state.email = e.target.value;
+          document.getElementById('emailError').textContent = '';
+          email.removeAttribute('aria-invalid');
+          updateQuestPanel();
+        });
         document.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
           const value = button.dataset.choice;
-          if (state.step === 2) state.timing = value;
-          if (state.step === 3) state.object = value;
-          if (state.step === 4) state.consultant = value;
-          if (state.step === 5) { state.hasDebts = value; if (value === 'no') state.debtPayment = ''; }
+          const groups = { 1: 'timing', 3: 'debts' };
+          if (state.step === 1) state.timing = value;
+          if (state.step === 3) { state.hasDebts = value; if (value === 'no') state.debtPayment = ''; }
+          setPressed(groups[state.step], value);
+          clearStepError();
+          updateQuestPanel();
+          if (state.step === 1) updateTimingResponse();
+          if (state.step === 3) renderFinanceDetails();
           reachGoal('mortgage_short_form_option_selected', { field: stepNames[state.step], value });
-          render();
         }));
-        document.querySelectorAll('[data-chip]').forEach(button => button.addEventListener('click', () => { state.income = button.dataset.chip; reachGoal('mortgage_short_form_option_selected', { field: 'income', value: state.income }); render(); }));
-        document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => { state.day = button.dataset.day; state.slot = ''; reachGoal('mortgage_short_form_option_selected', { field: 'call_day', value: state.day }); render(); }));
-        document.querySelectorAll('[data-slot]').forEach(button => button.addEventListener('click', () => { state.slot = button.dataset.slot; reachGoal('mortgage_short_form_call_slot_selected', { slot: state.slot }); render(); }));
+        document.querySelectorAll('[data-chip]').forEach(button => button.addEventListener('click', () => {
+          state.income = button.dataset.chip;
+          setPressed('income', state.income);
+          clearStepError();
+          updateQuestPanel();
+          updateIncomeVisual();
+          renderFinanceDetails();
+          reachGoal('mortgage_short_form_option_selected', { field: 'income', value: state.income });
+        }));
+        document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => {
+          if (state.day === button.dataset.day) return;
+          state.day = button.dataset.day;
+          state.slot = '';
+          setPressed('day', state.day);
+          clearStepError();
+          updateQuestPanel();
+          renderScheduleSlots();
+          updateCallPreview();
+          reachGoal('mortgage_short_form_option_selected', { field: 'call_day', value: state.day });
+        }));
+        bindObjectSwipe();
         const marketing = document.getElementById('marketing');
         if (marketing) marketing.addEventListener('change', e => { state.marketing = e.target.checked; reachGoal('mortgage_short_form_optional_consent', { enabled: state.marketing }); });
         const back = document.getElementById('back');
-        if (back) back.addEventListener('click', () => { reachGoal('mortgage_short_form_back'); state.showErrors = false; state.transition = 'back'; state.step--; render(); });
+        if (back) back.addEventListener('click', () => { if (state.submitting) return; reachGoal('mortgage_short_form_back'); state.showErrors = false; state.transition = 'back'; state.step--; render(); });
         const next = document.getElementById('next');
         if (next) next.addEventListener('click', () => {
+          if (state.submitting) return;
           if (!validate()) { reachGoal('mortgage_short_form_validation_error'); showFieldErrors(); return; }
           state.showErrors = false;
           state.transition = 'forward';
           if (state.step === 0) reachGoal('mortgage_short_form_start');
           else reachGoal('mortgage_short_form_step_complete');
-          if (state.step === 6) {
+          if (state.step === 5) {
             reachGoal('mortgage_short_form_submit');
             state.submitting = true;
-            render();
-            window.setTimeout(() => { state.submitting = false; state.step++; reachGoal('mortgage_short_form_success'); render(); }, 650);
+            next.disabled = true;
+            next.setAttribute('aria-busy', 'true');
+            next.textContent = 'Передаём заявку…';
+            if (back) back.disabled = true;
+            window.setTimeout(() => { state.submitting = false; state.step = 6; reachGoal('mortgage_short_form_success'); render(); }, 650);
             return;
           }
           state.step++;
