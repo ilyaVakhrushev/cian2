@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Циан · Карта ипотечного сценария</title>
     <style>
-      :root { --blue:#0054fd; --blue-soft:#e9efff; --ink:#18201d; --muted:#66716c; --line:#dce3df; --canvas:#f5f7f6; --surface:#fff; --good:#168a59; }
+      :root { --blue:#0054fd; --blue-soft:#e9efff; --ink:#18201d; --muted:#66716c; --line:#dce3df; --canvas:#e9eefb; --surface:rgba(255,255,255,.54); --good:#168a59; --glass-border:rgba(255,255,255,.8); }
       * { box-sizing: border-box; }
-      body { margin:0; color:var(--ink); background:var(--canvas); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Arial,sans-serif; }
+      body { margin:0; color:var(--ink); background:radial-gradient(circle at 8% 7%,rgba(0,84,253,.28),transparent 31rem),radial-gradient(circle at 92% 13%,rgba(152,116,255,.24),transparent 29rem),radial-gradient(circle at 48% 90%,rgba(68,207,190,.18),transparent 30rem),var(--canvas); font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Arial,sans-serif; }
       .page { max-width:1320px; margin:auto; padding:44px 24px 72px; }
-      .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; }
+      .hero { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:28px; padding:24px; border:1px solid var(--glass-border); border-radius:26px; background:rgba(255,255,255,.46); box-shadow:0 16px 36px rgba(29,63,136,.11),inset 0 1px 0 rgba(255,255,255,.72); backdrop-filter:blur(22px) saturate(130%); -webkit-backdrop-filter:blur(22px) saturate(130%); }
       .brand { color:var(--blue); font-weight:800; letter-spacing:-1px; font-size:25px; }
       h1 { max-width:650px; margin:8px 0 0; font-size:38px; line-height:1.06; letter-spacing:-1.4px; }
       .lead { max-width:610px; margin:12px 0 0; color:var(--muted); font-size:16px; line-height:1.5; }
@@ -21,8 +21,8 @@
       .flow { min-width:1120px; display:grid; grid-template-columns:repeat(8, 126px); column-gap:30px; align-items:start; position:relative; padding:28px 12px 50px; }
       .flow::before { content:""; position:absolute; top:155px; left:72px; right:64px; height:2px; background:var(--line); }
       .node { position:relative; z-index:1; }
-      .phone { height:228px; padding:7px; border:1px solid #cfd8d3; border-radius:23px; background:#fff; box-shadow:0 8px 18px rgba(25,42,34,.08); }
-      .screen { height:100%; border-radius:17px; padding:11px 9px; background:linear-gradient(160deg,#fff 0%,#f6f8ff 100%); overflow:hidden; }
+      .phone { height:228px; padding:7px; border:1px solid var(--glass-border); border-radius:23px; background:rgba(255,255,255,.5); box-shadow:0 10px 22px rgba(25,55,118,.12),inset 0 1px 0 rgba(255,255,255,.74); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+      .screen { height:100%; border:1px solid rgba(255,255,255,.7); border-radius:17px; padding:11px 9px; background:linear-gradient(160deg,rgba(255,255,255,.72) 0%,rgba(235,241,255,.44) 100%); overflow:hidden; }
       .mini-top { height:7px; width:38px; margin:auto; border-radius:99px; background:#1c2521; opacity:.16; }
       .mini-brand { margin-top:12px; color:var(--blue); font-size:9px; font-weight:800; }
       .mini-kicker { margin-top:12px; color:#5770ad; font-size:7px; font-weight:700; }
@@ -31,26 +31,26 @@
       .mini-line { height:8px; margin-top:8px; border-radius:6px; background:#edf0ef; }
       .mini-line.short { width:72%; }
       .mini-btn { height:18px; margin-top:12px; border-radius:7px; background:var(--blue); }
-      .mini-choice { display:flex; align-items:center; gap:5px; height:20px; margin-top:7px; padding:3px 5px; border:1px solid #dbe2de; border-radius:6px; color:#53605a; font-size:6px; }
-      .mini-choice.active { border-color:var(--blue); background:var(--blue-soft); color:#2853b1; }
+      .mini-choice { display:flex; align-items:center; gap:5px; height:20px; margin-top:7px; padding:3px 5px; border:1px solid rgba(255,255,255,.78); border-radius:6px; background:rgba(255,255,255,.43); color:#53605a; font-size:6px; }
+      .mini-choice.active { border-color:rgba(0,84,253,.44); background:rgba(233,239,255,.65); color:#2853b1; }
       .mini-choice::before { content:""; width:5px; height:5px; border-radius:50%; background:#cbd5d0; }
       .mini-choice.active::before { background:var(--blue); }
       .mini-success { width:33px; height:33px; display:grid; place-items:center; margin:26px auto 9px; border-radius:12px; color:var(--good); background:#e6f6ee; font-size:20px; font-weight:800; }
       .node h2 { margin:10px 0 0; font-size:14px; line-height:1.2; letter-spacing:-.25px; }
       .node p { margin:4px 0 0; color:var(--muted); font-size:11px; line-height:1.35; }
-      .event { position:absolute; z-index:2; top:128px; left:calc(100% + 4px); width:172px; padding:7px 8px; border:1px solid #bfe5d1; border-radius:9px; color:#227048; background:#effaf3; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9px; line-height:1.25; }
+      .event { position:absolute; z-index:2; top:128px; left:calc(100% + 4px); width:172px; padding:7px 8px; border:1px solid rgba(255,255,255,.82); border-radius:9px; color:#227048; background:rgba(239,250,243,.7); box-shadow:0 6px 14px rgba(40,83,70,.08),inset 0 1px 0 rgba(255,255,255,.75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9px; line-height:1.25; }
       .event::before { content:""; position:absolute; top:50%; left:-12px; width:11px; border-top:1px solid var(--good); }
       .event.down { top:212px; }
       .event strong { display:block; margin-top:2px; color:#407a5b; font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif; font-size:9px; font-weight:650; }
       .node:last-child .event { display:none; }
       .notes { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(330px,.85fr); gap:20px; margin-top:18px; }
-      .panel { padding:24px; border:1px solid #e1e7e4; border-radius:22px; background:var(--surface); }
+      .panel { padding:24px; border:1px solid var(--glass-border); border-radius:22px; background:var(--surface); box-shadow:0 14px 30px rgba(29,63,136,.10),inset 0 1px 0 rgba(255,255,255,.75); backdrop-filter:blur(20px) saturate(128%); -webkit-backdrop-filter:blur(20px) saturate(128%); }
       .panel h2 { margin:0; font-size:20px; letter-spacing:-.45px; }
       .panel h3 { margin:18px 0 5px; font-size:14px; }
       .panel p, .panel li { color:#53605a; font-size:14px; line-height:1.48; }
       .panel p { margin:4px 0 0; }
       .panel ul { margin:7px 0 0; padding-left:19px; }
-      .metric { margin-top:16px; padding:14px; border-radius:14px; background:#f4f7ff; }
+      .metric { margin-top:16px; padding:14px; border:1px solid rgba(255,255,255,.76); border-radius:14px; background:rgba(244,247,255,.56); box-shadow:inset 0 1px 0 rgba(255,255,255,.72); backdrop-filter:blur(13px); -webkit-backdrop-filter:blur(13px); }
       .metric b { display:block; color:#1f4ab8; font-size:13px; }
       .metric span { display:block; margin-top:4px; color:#536591; font-size:13px; line-height:1.35; }
       code { padding:2px 4px; border-radius:4px; color:#1d4abb; background:#edf2ff; font-size:.88em; }
