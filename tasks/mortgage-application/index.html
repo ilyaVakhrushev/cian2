@@ -175,9 +175,13 @@
         step: 0,
         name: '', email: 'ilya@example.com', phone: '+7 900 555-21-20',
         timing: '', object: '', consultant: '', income: '', hasDebts: '', debtPayment: '',
-        day: '', slot: '', marketing: false, showErrors: false, transition: 'forward', submitting: false
+        day: '', slot: '', marketing: false, showErrors: false, transition: 'forward', submitting: false,
+        viewedSteps: new Set(), resultTracked: false
       };
       const totalSteps = 7;
+      // TODO: заменить на реальный номер счётчика перед подключением Яндекс Метрики.
+      const METRIKA_COUNTER_ID = 00000000;
+      const stepNames = ['entry', 'contacts', 'timing', 'object', 'consultant', 'finance', 'call_time', 'success'];
       const content = document.getElementById('content');
       const footer = document.getElementById('footer');
       const progressBar = document.getElementById('progressBar');
@@ -190,6 +194,19 @@
         { label: 'Вт', date: '25 ноября' }
       ];
       const slots = ['10:00–12:00', '12:00–15:00', '18:00–21:00'];
+
+      function reachGoal(name, params = {}) {
+        const payload = { step: stepNames[state.step], step_number: state.step, ...params };
+        if (typeof window.ym === 'function') window.ym(METRIKA_COUNTER_ID, 'reachGoal', name, payload);
+        // Заглушка для локальной разработки: событие видно в DevTools без подключения счётчика.
+        console.info('[metrika goal]', name, payload);
+      }
+
+      function trackStepView() {
+        if (state.viewedSteps.has(state.step)) return;
+        state.viewedSteps.add(state.step);
+        reachGoal('mortgage_short_form_step_view');
+      }
 
       function escapeHtml(value) {
         return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
@@ -224,6 +241,7 @@
       }
       function render() {
         updateProgress();
+        trackStepView();
         let html = '';
         let actions = '';
         if (state.step === 0) {
@@ -249,6 +267,7 @@
           actions = navActions('Продолжить');
         }
         if (state.step === 5) {
+          if (state.income && state.hasDebts && !state.resultTracked) { state.resultTracked = true; reachGoal('mortgage_short_form_pre_result_shown'); }
           html = `<section class="screen"><p class="eyebrow">Финансы</p><h2>Какой у вас доход в месяц?</h2><p class="lead">Достаточно примерной суммы — без справок и документов.</p><div class="choice-grid">${chip('До 100 000 ₽','100',state.income==='100')}${chip('100–200 тыс. ₽','200',state.income==='200')}${chip('200–350 тыс. ₽','350',state.income==='350')}${chip('Больше 350 тыс. ₽','350plus',state.income==='350plus')}</div><div class="soft-note">Доход не влияет на решение автоматически — он нужен, чтобы разговор с экспертом был предметнее.</div><div class="choices" style="margin-top:16px">${choice('Есть кредиты','yes',state.hasDebts==='yes')}${choice('Кредитов нет','no',state.hasDebts==='no')}</div>${state.hasDebts==='yes' ? `<div class="field" style="margin-top:14px"><label for="debt">Ежемесячный платёж по кредитам</label><input id="debt" inputmode="numeric" placeholder="Например, 18 000" value="${escapeHtml(state.debtPayment)}" /><div class="error">${state.showErrors && Number(state.debtPayment.replace(/\s/g,'')) <= 0 ? 'Укажите ежемесячный платёж' : ''}</div></div>` : ''}${state.showErrors && (!state.income || !state.hasDebts) ? '<div class="error" role="alert">Выберите доход и укажите, есть ли кредиты</div>' : ''}${state.income && state.hasDebts ? `<div class="result-card"><b>Предварительный ориентир готов</b><p>Эксперт уже сможет обсудить подходящие программы и уточнить детали, влияющие на ставку.</p></div>` : ''}</section>`;
           actions = navActions('Посмотреть ориентир');
         }
@@ -289,31 +308,35 @@
           if (state.step === 3) state.object = value;
           if (state.step === 4) state.consultant = value;
           if (state.step === 5) { state.hasDebts = value; if (value === 'no') state.debtPayment = ''; }
+          reachGoal('mortgage_short_form_option_selected', { field: stepNames[state.step], value });
           render();
         }));
-        document.querySelectorAll('[data-chip]').forEach(button => button.addEventListener('click', () => { state.income = button.dataset.chip; render(); }));
-        document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => { state.day = button.dataset.day; state.slot = ''; render(); }));
-        document.querySelectorAll('[data-slot]').forEach(button => button.addEventListener('click', () => { state.slot = button.dataset.slot; render(); }));
+        document.querySelectorAll('[data-chip]').forEach(button => button.addEventListener('click', () => { state.income = button.dataset.chip; reachGoal('mortgage_short_form_option_selected', { field: 'income', value: state.income }); render(); }));
+        document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => { state.day = button.dataset.day; state.slot = ''; reachGoal('mortgage_short_form_option_selected', { field: 'call_day', value: state.day }); render(); }));
+        document.querySelectorAll('[data-slot]').forEach(button => button.addEventListener('click', () => { state.slot = button.dataset.slot; reachGoal('mortgage_short_form_call_slot_selected', { slot: state.slot }); render(); }));
         const marketing = document.getElementById('marketing');
-        if (marketing) marketing.addEventListener('change', e => state.marketing = e.target.checked);
+        if (marketing) marketing.addEventListener('change', e => { state.marketing = e.target.checked; reachGoal('mortgage_short_form_optional_consent', { enabled: state.marketing }); });
         const back = document.getElementById('back');
-        if (back) back.addEventListener('click', () => { state.showErrors = false; state.transition = 'back'; state.step--; render(); });
+        if (back) back.addEventListener('click', () => { reachGoal('mortgage_short_form_back'); state.showErrors = false; state.transition = 'back'; state.step--; render(); });
         const next = document.getElementById('next');
         if (next) next.addEventListener('click', () => {
-          if (!validate()) { showFieldErrors(); return; }
+          if (!validate()) { reachGoal('mortgage_short_form_validation_error'); showFieldErrors(); return; }
           state.showErrors = false;
           state.transition = 'forward';
+          if (state.step === 0) reachGoal('mortgage_short_form_start');
+          else reachGoal('mortgage_short_form_step_complete');
           if (state.step === 6) {
+            reachGoal('mortgage_short_form_submit');
             state.submitting = true;
             render();
-            window.setTimeout(() => { state.submitting = false; state.step++; render(); }, 650);
+            window.setTimeout(() => { state.submitting = false; state.step++; reachGoal('mortgage_short_form_success'); render(); }, 650);
             return;
           }
           state.step++;
           render();
         });
         const restart = document.getElementById('restart');
-        if (restart) restart.addEventListener('click', () => { Object.assign(state, { step: 0, name: '', email: 'ilya@example.com', timing: '', object: '', consultant: '', income: '', hasDebts: '', debtPayment: '', day: '', slot: '', marketing: false, showErrors: false, transition: 'back', submitting: false }); render(); });
+        if (restart) restart.addEventListener('click', () => { Object.assign(state, { step: 0, name: '', email: 'ilya@example.com', timing: '', object: '', consultant: '', income: '', hasDebts: '', debtPayment: '', day: '', slot: '', marketing: false, showErrors: false, transition: 'back', submitting: false, viewedSteps: new Set(), resultTracked: false }); render(); });
       }
       render();
     </script>
